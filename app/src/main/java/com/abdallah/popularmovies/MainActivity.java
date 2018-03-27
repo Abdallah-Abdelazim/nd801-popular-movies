@@ -17,9 +17,12 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.abdallah.popularmovies.adapter.EndlessRecyclerOnScrollListener;
+import com.abdallah.popularmovies.adapter.MoviesAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.entity.Movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindInt;
@@ -65,7 +68,20 @@ public class MainActivity extends AppCompatActivity {
             layoutManager = new GridLayoutManager(this, gridSpanCount);
             moviesRecyclerView.setLayoutManager(layoutManager);
 
+            moviesList = new ArrayList<>();
+            adapter = new MoviesAdapter(moviesList);
+            moviesRecyclerView.setAdapter(adapter);
+
             loadMovies(moviesSortingMethod, currentPage);
+
+            int recyclerViewVisibleThreshold = 5;
+            moviesRecyclerView.addOnScrollListener(
+                    new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
+                @Override
+                public void onLoadMore() {
+                    loadMovies(moviesSortingMethod, ++currentPage);
+                }
+            });
         }
         else {
             noInternetConnectivity = true;
@@ -158,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            moviesRecyclerView.setVisibility(View.INVISIBLE);
             loadingMoviesProgressBar.setVisibility(View.VISIBLE);
         }
 
@@ -182,12 +197,8 @@ public class MainActivity extends AppCompatActivity {
             loadingMoviesProgressBar.setVisibility(View.INVISIBLE);
 
             if (movies != null) {
-                moviesList = movies;
-
-                // create RecyclerView's adapter & show it
-                adapter = new MoviesAdapter(movies);
-                moviesRecyclerView.setAdapter(adapter);
-                moviesRecyclerView.setVisibility(View.VISIBLE);
+                moviesList.addAll(movies);
+                adapter.notifyDataSetChanged();
             }
             else {
                 Log.d(TAG, "onPostExecute(): moviesList equals null");

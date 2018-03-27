@@ -1,14 +1,14 @@
-package com.abdallah.popularmovies;
+package com.abdallah.popularmovies.adapter;
 
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.entity.Movie;
 import com.squareup.picasso.Picasso;
