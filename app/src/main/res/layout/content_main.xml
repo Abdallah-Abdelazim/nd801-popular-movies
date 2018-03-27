@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.abdallah.popularmovies.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <ProgressBar
+        android:id="@+id/loading_movies_pb"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/ll_no_connectivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/no_connectivity_message_linear_layout_padding"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/tv_no_connectivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_network_connectivity_message"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/btn_retry_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/retry_loading_button_text"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_movies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+</FrameLayout>

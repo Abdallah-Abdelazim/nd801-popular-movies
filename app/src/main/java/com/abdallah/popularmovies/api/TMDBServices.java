@@ -1,0 +1,89 @@
+package com.abdallah.popularmovies.api;
+
+
+import android.net.Uri;
+import android.util.Log;
+
+import com.abdallah.popularmovies.BuildConfig;
+import com.abdallah.popularmovies.entity.Movie;
+import com.abdallah.popularmovies.util.NetworkUtil;
+import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.IOException;
+import java.util.List;
+
+public final class TMDBServices {
+
+    private static final String TAG = TMDBServices.class.getSimpleName();
+
+    private final static String API_KEY = BuildConfig.TMDB_API_KEY;
+
+    private final static String BASE_URL = "https://api.themoviedb.org/3";
+    private final static String MOST_POPULAR_MOVIES_PATH = "/movie/popular";
+    private final static String HIGHEST_RATED_MOVIES_PATH = "/movie/top_rated";
+    private final static String MOVIE_DETAILS_PATH = "/movie";
+
+    private final static String API_KEY_PARAM = "api_key";
+    private final static String PAGE_PARAM = "page";
+
+
+    public static final int SORT_MOVIES_BY_POPULARITY = 1;
+    public static final int SORT_MOVIES_BY_RATING = 2;
+
+    public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185";
+
+
+    public static final class Response {
+        public int page;
+        public int totalResults;
+        public int totalPages;
+
+        @SerializedName("results")
+        public List<Movie> movies;
+    }
+
+    public static List<Movie> getMovies(int moviesSortingMethod, int page) {
+
+        String path;
+        if (moviesSortingMethod == SORT_MOVIES_BY_POPULARITY) {
+            path = MOST_POPULAR_MOVIES_PATH;
+        }
+        else if (moviesSortingMethod == SORT_MOVIES_BY_RATING) {
+            path = HIGHEST_RATED_MOVIES_PATH;
+        }
+        else {
+            Log.d(TAG, "getMovies(): Undefined sorting method");
+            return null;
+        }
+
+        String url = Uri.parse(BASE_URL + path)
+                .buildUpon()
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .appendQueryParameter(PAGE_PARAM, Integer.toString(page))
+                .build()
+                .toString();
+
+        String result = null;
+        try {
+            result = NetworkUtil.sendGetRequest(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (result != null) {
+            // serialize the json to Movies objects
+            Gson gson = new Gson();
+            Response response = gson.fromJson(result, TMDBServices.Response.class);
+            return response.movies;
+
+        }
+        return null;
+    }
+
+    public static Movie getMovieDetails() {
+
+        return null;
+    }
+
+}

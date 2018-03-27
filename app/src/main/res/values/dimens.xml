@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="recyclerview_items_padding">8dp</dimen>
+    <dimen name="no_connectivity_message_linear_layout_padding">8dp</dimen>
+</resources>
