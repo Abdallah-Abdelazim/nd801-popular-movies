@@ -20,9 +20,9 @@ public final class TMDBServices {
     private final static String API_KEY = BuildConfig.TMDB_API_KEY;
 
     private final static String BASE_URL = "https://api.themoviedb.org/3";
-    private final static String MOST_POPULAR_MOVIES_PATH = "/movie/popular";
-    private final static String HIGHEST_RATED_MOVIES_PATH = "/movie/top_rated";
-    private final static String MOVIE_DETAILS_PATH = "/movie";
+    private final static String MOST_POPULAR_MOVIES_PATH = "movie/popular";
+    private final static String HIGHEST_RATED_MOVIES_PATH = "movie/top_rated";
+    private final static String MOVIE_DETAILS_PATH = "movie";
 
     private final static String API_KEY_PARAM = "api_key";
     private final static String PAGE_PARAM = "page";
@@ -34,7 +34,7 @@ public final class TMDBServices {
     public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185";
 
 
-    public static final class Response {
+    public static final class MoviesResponse {
         public int page;
         public int totalResults;
         public int totalPages;
@@ -57,8 +57,9 @@ public final class TMDBServices {
             return null;
         }
 
-        String url = Uri.parse(BASE_URL + path)
+        String url = Uri.parse(BASE_URL)
                 .buildUpon()
+                .appendEncodedPath(path)
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .appendQueryParameter(PAGE_PARAM, Integer.toString(page))
                 .build()
@@ -72,16 +73,36 @@ public final class TMDBServices {
         }
 
         if (result != null) {
-            // serialize the json to Movies objects
+            // serialize the json to MoviesResponse object
             Gson gson = new Gson();
-            Response response = gson.fromJson(result, TMDBServices.Response.class);
-            return response.movies;
+            MoviesResponse response = gson.fromJson(result, MoviesResponse.class);
 
+            return response.movies;
         }
         return null;
     }
 
-    public static Movie getMovieDetails() {
+    public static Movie getMovieDetails(long movieId) {
+        String url = Uri.parse(BASE_URL).buildUpon()
+                .appendEncodedPath(MOVIE_DETAILS_PATH)
+                .appendEncodedPath(Long.toString(movieId))
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .build()
+                .toString();
+
+        String result = null;
+        try {
+            result = NetworkUtil.sendGetRequest(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (result != null) {
+            // serialize the json to Movie object
+            Gson gson = new Gson();
+            Movie movie = gson.fromJson(result, Movie.class);
+            return movie;
+        }
 
         return null;
     }

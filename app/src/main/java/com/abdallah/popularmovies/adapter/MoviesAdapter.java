@@ -22,8 +22,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     private List<Movie> movies;
 
-    public MoviesAdapter(List<Movie> movies) {
+    private RecyclerViewItemClickListener onClickListener;
+
+    public MoviesAdapter(List<Movie> movies, RecyclerViewItemClickListener onClickListener) {
         this.movies = movies;
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -51,13 +54,28 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         return movies.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView moviePosterImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             moviePosterImageView = itemView.findViewById(R.id.iv_movie_poster);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedItemIndex = getAdapterPosition();
+            onClickListener.onRecyclerViewItemClicked(clickedItemIndex);
         }
     }
+
+    /**
+     * Used in handling items clicks
+     */
+    public interface RecyclerViewItemClickListener {
+        void onRecyclerViewItemClicked(int clickedItemIndex);
+    }
+
 }

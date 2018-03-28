@@ -1,6 +1,7 @@
 package com.abdallah.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -30,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.RecyclerViewItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
     private int currentPage = 1;
+
+    private int recyclerViewVisibleThreshold = 5;
 
     private boolean noInternetConnectivity = false;
 
@@ -69,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
             moviesRecyclerView.setLayoutManager(layoutManager);
 
             moviesList = new ArrayList<>();
-            adapter = new MoviesAdapter(moviesList);
+            adapter = new MoviesAdapter(moviesList, this);
             moviesRecyclerView.setAdapter(adapter);
 
-            loadMovies(moviesSortingMethod, currentPage);
+            loadMovies();
 
-            int recyclerViewVisibleThreshold = 5;
             moviesRecyclerView.addOnScrollListener(
                     new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
                 @Override
                 public void onLoadMore() {
-                    loadMovies(moviesSortingMethod, ++currentPage);
+                    currentPage++;
+                    loadMovies();
                 }
             });
         }
@@ -91,8 +94,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadMovies(int sortingMethod, int page) {
-        new MoviesQueryTask().execute(sortingMethod, page);
+    private void loadMovies() {
+        new MoviesQueryTask().execute(moviesSortingMethod, currentPage);
+    }
+
+    private void resetMoviesAfterChangingSorting() {
+        currentPage = 1;
+        moviesList.clear();
+        adapter.notifyDataSetChanged();
+        loadMovies();
+
+        moviesRecyclerView.addOnScrollListener(
+                new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
+            @Override
+            public void onLoadMore() {
+                currentPage++;
+                loadMovies();
+            }
+        });
     }
 
     @OnClick(R.id.btn_retry_loading)
@@ -107,7 +126,20 @@ public class MainActivity extends AppCompatActivity {
             layoutManager = new GridLayoutManager(this, gridSpanCount);
             moviesRecyclerView.setLayoutManager(layoutManager);
 
-            loadMovies(moviesSortingMethod, currentPage);
+            moviesList = new ArrayList<>();
+            adapter = new MoviesAdapter(moviesList, this);
+            moviesRecyclerView.setAdapter(adapter);
+
+            loadMovies();
+
+            moviesRecyclerView.addOnScrollListener(
+                    new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
+                @Override
+                public void onLoadMore() {
+                    currentPage++;
+                    loadMovies();
+                }
+            });
         }
     }
 
@@ -132,12 +164,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, getString(R.string.no_internet_toast), Toast.LENGTH_SHORT).show();
                     return super.onOptionsItemSelected(item);
                 }
-
-                moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY;
                 item.setChecked(true);
 
-                // reload the recycler view
-                loadMovies(TMDBServices.SORT_MOVIES_BY_POPULARITY, currentPage);
+                moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY;
+
+                resetMoviesAfterChangingSorting();
 
                 return true;
 
@@ -146,12 +177,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, getString(R.string.no_internet_toast), Toast.LENGTH_SHORT).show();
                     return super.onOptionsItemSelected(item);
                 }
-
-                moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_RATING;
                 item.setChecked(true);
 
-                // reload recycler view
-                loadMovies(TMDBServices.SORT_MOVIES_BY_RATING, currentPage);
+                moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_RATING;
+
+                resetMoviesAfterChangingSorting();
 
                 return true;
 
@@ -166,6 +196,19 @@ public class MainActivity extends AppCompatActivity {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    @Override
+    public void onRecyclerViewItemClicked(int clickedItemIndex) {
+        Intent intent = new Intent(this, MovieDetailsActivity.class);
+
+        Movie movie = moviesList.get(clickedItemIndex);
+        long movieId = movie.getId();
+        String movieTitle = movie.getTitle();
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_TITLE, movieTitle);
+
+        startActivity(intent);
     }
 
 

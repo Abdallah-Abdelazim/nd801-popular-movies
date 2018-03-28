@@ -1,0 +1,114 @@
+package com.abdallah.popularmovies;
+
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.abdallah.popularmovies.api.TMDBServices;
+import com.abdallah.popularmovies.entity.Movie;
+import com.abdallah.popularmovies.util.NetworkUtil;
+import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class MovieDetailsActivity extends AppCompatActivity {
+
+    private static final String TAG = MovieDetailsActivity.class.getSimpleName();
+
+    public static final String EXTRA_MOVIE_ID = "MovieID";
+    public static final String EXTRA_MOVIE_TITLE = "MovieTitle";
+
+    private Movie movie;
+
+    @BindView(R.id.iv_movie_poster) ImageView moviePosterImageView;
+    @BindView(R.id.tv_release_date) TextView releaseDateTextView;
+    @BindView(R.id.tv_rating) TextView ratingTextView;
+    @BindView(R.id.tv_overview) TextView overviewTextView;
+    @BindView(R.id.movie_details_layout) ConstraintLayout movieDetailsLayout;
+    @BindView(R.id.pb_loading_movie_details) ProgressBar loadingMovieDetailsProgressBar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_movie_details);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+//        FloatingActionButton makeFavoriteFab = (FloatingActionButton) findViewById(R.id.fab_make_favorite);
+//        makeFavoriteFab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(MovieDetailsActivity.this
+//                        , "This will be implemented in the next stage", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        long movieId = intent.getLongExtra(EXTRA_MOVIE_ID, -1);
+        String movieTitle = intent.getStringExtra(EXTRA_MOVIE_TITLE);
+        setTitle(movieTitle);
+
+        loadMovieDetails(movieId);
+    }
+
+    private void loadMovieDetails(long movieId) {
+        new GetMovieDetailsTask().execute(movieId);
+    }
+
+
+    private class GetMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            movieDetailsLayout.setVisibility(View.INVISIBLE);
+            loadingMovieDetailsProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Movie doInBackground(Long... longs) {
+            if (longs.length == 1) {
+                long movieId = longs[0];
+                return TMDBServices.getMovieDetails(movieId);
+            }
+            else {
+                Log.d(TAG, "doInBackground(): Wrong method parameters.");
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Movie movie) {
+            super.onPostExecute(movie);
+
+            String posterUrl = TMDBServices.IMG_BASE_URL + movie.getPosterPath();
+            Picasso.get()
+                    .load(posterUrl)
+                    .into(moviePosterImageView);
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY");
+            releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
+
+            ratingTextView.setText(Float.toString(movie.getVoteAverage()));
+
+            overviewTextView.setText(movie.getOverview());
+
+
+            loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
+            movieDetailsLayout.setVisibility(View.VISIBLE);
+        }
+    }
+}

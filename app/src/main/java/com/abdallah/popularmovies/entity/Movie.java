@@ -9,7 +9,7 @@ public class Movie {
 
     private long id;
     private String title;
-    private String overview;
+    private String overview;  // also called plot synopsis
     private String tagline;
 
     @SerializedName("backdrop_path")
