@@ -46,15 +46,16 @@ public final class TMDBServices {
     public static List<Movie> getMovies(int moviesSortingMethod, int page) {
 
         String path;
-        if (moviesSortingMethod == SORT_MOVIES_BY_POPULARITY) {
-            path = MOST_POPULAR_MOVIES_PATH;
-        }
-        else if (moviesSortingMethod == SORT_MOVIES_BY_RATING) {
-            path = HIGHEST_RATED_MOVIES_PATH;
-        }
-        else {
-            Log.d(TAG, "getMovies(): Undefined sorting method");
-            return null;
+        switch (moviesSortingMethod) {
+            case SORT_MOVIES_BY_POPULARITY:
+                path = MOST_POPULAR_MOVIES_PATH;
+                break;
+            case SORT_MOVIES_BY_RATING:
+                path = HIGHEST_RATED_MOVIES_PATH;
+                break;
+            default:
+                Log.d(TAG, "getMovies(): Undefined sorting method");
+                return null;
         }
 
         String url = Uri.parse(BASE_URL)

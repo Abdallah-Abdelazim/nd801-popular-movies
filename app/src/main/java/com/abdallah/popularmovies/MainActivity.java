@@ -63,28 +63,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
         // check whether there's network connectivity or not
         if (isOnline()) {
-
-            // This setting improves performance since changes
-            // in content do not change the layout size of the RecyclerView
-            moviesRecyclerView.setHasFixedSize(true);
-
-            layoutManager = new GridLayoutManager(this, gridSpanCount);
-            moviesRecyclerView.setLayoutManager(layoutManager);
-
-            moviesList = new ArrayList<>();
-            adapter = new MoviesAdapter(moviesList, this);
-            moviesRecyclerView.setAdapter(adapter);
-
-            loadMovies();
-
-            moviesRecyclerView.addOnScrollListener(
-                    new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
-                @Override
-                public void onLoadMore() {
-                    currentPage++;
-                    loadMovies();
-                }
-            });
+            configureMoviesRecyclerView();
         }
         else {
             noInternetConnectivity = true;
@@ -94,11 +73,35 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
         }
     }
 
+    private void configureMoviesRecyclerView() {
+        // This setting improves performance since changes
+        // in content do not change the layout size of the RecyclerView
+        moviesRecyclerView.setHasFixedSize(true);
+
+        layoutManager = new GridLayoutManager(this, gridSpanCount);
+        moviesRecyclerView.setLayoutManager(layoutManager);
+
+        moviesList = new ArrayList<>();
+        adapter = new MoviesAdapter(moviesList, this);
+        moviesRecyclerView.setAdapter(adapter);
+
+        loadMovies();
+
+        moviesRecyclerView.addOnScrollListener(
+                new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
+            @Override
+            public void onLoadMore() {
+                currentPage++;
+                loadMovies();
+            }
+        });
+    }
+
     private void loadMovies() {
         new MoviesQueryTask().execute(moviesSortingMethod, currentPage);
     }
 
-    private void resetMoviesAfterChangingSorting() {
+    private void resetMoviesRecyclerViewAfterChangingSorting() {
         currentPage = 1;
         moviesList.clear();
         adapter.notifyDataSetChanged();
@@ -119,27 +122,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
         if (isOnline()) {
             noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
 
-            // This setting improves performance since changes
-            // in content do not change the layout size of the RecyclerView
-            moviesRecyclerView.setHasFixedSize(true);
-
-            layoutManager = new GridLayoutManager(this, gridSpanCount);
-            moviesRecyclerView.setLayoutManager(layoutManager);
-
-            moviesList = new ArrayList<>();
-            adapter = new MoviesAdapter(moviesList, this);
-            moviesRecyclerView.setAdapter(adapter);
-
-            loadMovies();
-
-            moviesRecyclerView.addOnScrollListener(
-                    new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
-                @Override
-                public void onLoadMore() {
-                    currentPage++;
-                    loadMovies();
-                }
-            });
+            configureMoviesRecyclerView();
         }
     }
 
@@ -168,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
                 moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY;
 
-                resetMoviesAfterChangingSorting();
+                resetMoviesRecyclerViewAfterChangingSorting();
 
                 return true;
 
@@ -181,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
                 moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_RATING;
 
-                resetMoviesAfterChangingSorting();
+                resetMoviesRecyclerViewAfterChangingSorting();
 
                 return true;
 
@@ -191,6 +174,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
     }
 
+    /**
+     * Utility function to return whether there's network connectivity or not.
+     * @return true if the device has network connectivity, false otherwise.
+     */
     private boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -204,9 +191,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
         Movie movie = moviesList.get(clickedItemIndex);
         long movieId = movie.getId();
-        String movieTitle = movie.getTitle();
         intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
-        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_TITLE, movieTitle);
 
         startActivity(intent);
     }

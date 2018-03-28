@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.entity.Movie;
-import com.abdallah.popularmovies.util.NetworkUtil;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -27,12 +26,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
 
     public static final String EXTRA_MOVIE_ID = "MovieID";
-    public static final String EXTRA_MOVIE_TITLE = "MovieTitle";
 
     private Movie movie;
 
+    @BindView(R.id.tv_title) TextView titleTextView;
     @BindView(R.id.iv_movie_poster) ImageView moviePosterImageView;
     @BindView(R.id.tv_release_date) TextView releaseDateTextView;
+    @BindView(R.id.tv_runtime) TextView runtimeTextView;
     @BindView(R.id.tv_rating) TextView ratingTextView;
     @BindView(R.id.tv_overview) TextView overviewTextView;
     @BindView(R.id.movie_details_layout) ConstraintLayout movieDetailsLayout;
@@ -42,7 +42,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 //        FloatingActionButton makeFavoriteFab = (FloatingActionButton) findViewById(R.id.fab_make_favorite);
@@ -58,8 +58,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         long movieId = intent.getLongExtra(EXTRA_MOVIE_ID, -1);
-        String movieTitle = intent.getStringExtra(EXTRA_MOVIE_TITLE);
-        setTitle(movieTitle);
 
         loadMovieDetails(movieId);
     }
@@ -94,6 +92,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         protected void onPostExecute(Movie movie) {
             super.onPostExecute(movie);
 
+            titleTextView.setText(movie.getTitle());
+
             String posterUrl = TMDBServices.IMG_BASE_URL + movie.getPosterPath();
             Picasso.get()
                     .load(posterUrl)
@@ -101,6 +101,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY");
             releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
+
+            runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
 
             ratingTextView.setText(Float.toString(movie.getVoteAverage()));
 

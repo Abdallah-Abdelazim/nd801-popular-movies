@@ -8,8 +8,7 @@
     <string name="retry_loading_button_text">Retry</string>
     <string name="no_internet_toast">Please connect to the Internet first</string>
     <string name="load_movies_error_msg">Error occurred while trying to load movies!</string>
-    <string name="action_settings">Settings</string>
     <string name="total_vote">/10</string>
-    <string name="overview_label_text">Overview</string>
     <string name="title_activity_movie_details">Movie Details</string>
+    <string name="movie_runtime">%1$d min.</string>
 </resources>
