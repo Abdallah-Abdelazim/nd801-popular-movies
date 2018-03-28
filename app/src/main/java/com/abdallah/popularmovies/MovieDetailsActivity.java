@@ -44,15 +44,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        FloatingActionButton makeFavoriteFab = (FloatingActionButton) findViewById(R.id.fab_make_favorite);
-//        makeFavoriteFab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(MovieDetailsActivity.this
-//                        , "This will be implemented in the next stage", Toast.LENGTH_SHORT).show();
-//            }
-//        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
