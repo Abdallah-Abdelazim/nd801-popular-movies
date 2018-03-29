@@ -5,8 +5,8 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.abdallah.popularmovies.BuildConfig;
-import com.abdallah.popularmovies.entity.Movie;
-import com.abdallah.popularmovies.util.NetworkUtil;
+import com.abdallah.popularmovies.models.Movie;
+import com.abdallah.popularmovies.utils.NetworkUtil;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 

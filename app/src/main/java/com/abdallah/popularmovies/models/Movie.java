@@ -1,4 +1,4 @@
-package com.abdallah.popularmovies.entity;
+package com.abdallah.popularmovies.models;
 
 
 import com.google.gson.annotations.SerializedName;

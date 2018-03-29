@@ -1,4 +1,4 @@
-package com.abdallah.popularmovies;
+package com.abdallah.popularmovies.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.abdallah.popularmovies.adapter.EndlessRecyclerOnScrollListener;
-import com.abdallah.popularmovies.adapter.MoviesAdapter;
+import com.abdallah.popularmovies.R;
+import com.abdallah.popularmovies.adapters.EndlessRecyclerOnScrollListener;
+import com.abdallah.popularmovies.adapters.MoviesAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
-import com.abdallah.popularmovies.entity.Movie;
+import com.abdallah.popularmovies.models.Movie;
 
 import java.util.ArrayList;
 import java.util.List;

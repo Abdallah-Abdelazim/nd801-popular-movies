@@ -1,4 +1,4 @@
-package com.abdallah.popularmovies.adapter;
+package com.abdallah.popularmovies.adapters;
 
 
 import android.support.annotation.NonNull;
@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
-import com.abdallah.popularmovies.entity.Movie;
+import com.abdallah.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

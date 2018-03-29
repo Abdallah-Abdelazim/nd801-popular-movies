@@ -1,4 +1,4 @@
-package com.abdallah.popularmovies.adapter;
+package com.abdallah.popularmovies.adapters;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;

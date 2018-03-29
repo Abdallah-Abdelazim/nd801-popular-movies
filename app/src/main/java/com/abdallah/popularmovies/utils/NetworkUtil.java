@@ -1,4 +1,4 @@
-package com.abdallah.popularmovies.util;
+package com.abdallah.popularmovies.utils;
 
 import java.io.IOException;
 

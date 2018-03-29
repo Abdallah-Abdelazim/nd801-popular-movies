@@ -1,4 +1,4 @@
-package com.abdallah.popularmovies;
+package com.abdallah.popularmovies.activities;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,8 +12,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
-import com.abdallah.popularmovies.entity.Movie;
+import com.abdallah.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
