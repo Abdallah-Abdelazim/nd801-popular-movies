@@ -37,7 +37,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
 
-        int visibleItemCount = recyclerView.getChildCount(); // number of items already been viewed
+        int visibleItemCount = recyclerView.getChildCount(); // number of items currently being viewed (visible items)
         int totalItemCount = recyclerView.getLayoutManager().getItemCount();
         int firstVisibleItem = ((GridLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
 
@@ -52,13 +52,15 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             }
         }
 
-        if (!loading && (totalItemCount - visibleItemCount)
-                <= (firstVisibleItem + visibleThreshold)) {
-            // End has been reached
+        if (!loading) {
+            int remainingItemCount = totalItemCount - (visibleItemCount + firstVisibleItem);
+            if (remainingItemCount <= visibleThreshold) {
+                // End has been reached
 
-            onLoadMore();
+                onLoadMore();
 
-            loading = true;
+                loading = true;
+            }
         }
     }
 

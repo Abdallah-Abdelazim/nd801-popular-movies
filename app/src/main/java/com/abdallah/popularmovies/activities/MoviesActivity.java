@@ -1,9 +1,6 @@
 package com.abdallah.popularmovies.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +20,7 @@ import com.abdallah.popularmovies.adapters.EndlessRecyclerOnScrollListener;
 import com.abdallah.popularmovies.adapters.MoviesAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Movie;
+import com.abdallah.popularmovies.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +30,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.RecyclerViewItemClickListener {
+public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.RecyclerViewItemClickListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MoviesActivity.class.getSimpleName();
+
+    public static final String EXTRA_MOVIE_ID = "MovieID";
 
     @BindView(R.id.rv_movies) RecyclerView moviesRecyclerView;
     @BindView(R.id.loading_movies_pb) ProgressBar loadingMoviesProgressBar;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
     private int recyclerViewVisibleThreshold = 5;
 
-    private boolean noInternetConnectivity = false;
+    private boolean isConnected = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +63,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
         ButterKnife.bind(this);
 
         // check whether there's network connectivity or not
-        if (isOnline()) {
+        if (NetworkUtils.isOnline(this)) {
             configureMoviesRecyclerView();
         }
         else {
-            noInternetConnectivity = true;
+            isConnected = false;
             moviesRecyclerView.setVisibility(View.INVISIBLE);
-            loadingMoviesProgressBar.setVisibility(View.INVISIBLE);
             noConnectivityMsgLinearLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -108,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
         adapter.notifyDataSetChanged();
         loadMovies();
 
+        moviesRecyclerView.clearOnScrollListeners();
         moviesRecyclerView.addOnScrollListener(
                 new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
             @Override
@@ -120,8 +120,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
     @OnClick(R.id.btn_retry_loading)
     public void retryLoadingMovies() {
-        if (isOnline()) {
+        if (NetworkUtils.isOnline(this)) {
+            isConnected = true;
             noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
+            moviesRecyclerView.setVisibility(View.VISIBLE);
 
             configureMoviesRecyclerView();
         }
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
         switch (id) {
             case R.id.action_sort_by_popularity:
-                if (noInternetConnectivity) {
+                if (!isConnected) {
                     Toast.makeText(this, getString(R.string.no_internet_toast), Toast.LENGTH_SHORT).show();
                     return super.onOptionsItemSelected(item);
                 }
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
                 return true;
 
             case R.id.action_sort_by_rating:
-                if (noInternetConnectivity) {
+                if (!isConnected) {
                     Toast.makeText(this, getString(R.string.no_internet_toast), Toast.LENGTH_SHORT).show();
                     return super.onOptionsItemSelected(item);
                 }
@@ -175,24 +177,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
 
     }
 
-    /**
-     * Utility function to return whether there's network connectivity or not.
-     * @return true if the device has network connectivity, false otherwise.
-     */
-    private boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
     @Override
     public void onRecyclerViewItemClicked(int clickedItemIndex) {
         Intent intent = new Intent(this, MovieDetailsActivity.class);
 
         Movie movie = moviesList.get(clickedItemIndex);
         long movieId = movie.getId();
-        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
+        intent.putExtra(EXTRA_MOVIE_ID, movieId);
 
         startActivity(intent);
     }
@@ -231,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.Rec
             }
             else {
                 Log.d(TAG, "onPostExecute(): moviesList equals null");
-                Toast.makeText(MainActivity.this
+                Toast.makeText(MoviesActivity.this
                         , R.string.load_movies_error_msg, Toast.LENGTH_SHORT)
                         .show();
             }

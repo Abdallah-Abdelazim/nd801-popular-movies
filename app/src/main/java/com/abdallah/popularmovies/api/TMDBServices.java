@@ -6,11 +6,14 @@ import android.util.Log;
 
 import com.abdallah.popularmovies.BuildConfig;
 import com.abdallah.popularmovies.models.Movie;
-import com.abdallah.popularmovies.utils.NetworkUtil;
+import com.abdallah.popularmovies.utils.NetworkUtils;
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 public final class TMDBServices {
@@ -33,15 +36,6 @@ public final class TMDBServices {
 
     public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185";
 
-
-    public static final class MoviesResponse {
-        public int page;
-        public int totalResults;
-        public int totalPages;
-
-        @SerializedName("results")
-        public List<Movie> movies;
-    }
 
     public static List<Movie> getMovies(int moviesSortingMethod, int page) {
 
@@ -68,17 +62,23 @@ public final class TMDBServices {
 
         String result = null;
         try {
-            result = NetworkUtil.sendGetRequest(url);
+            result = NetworkUtils.sendGetRequest(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         if (result != null) {
-            // serialize the json to MoviesResponse object
-            Gson gson = new Gson();
-            MoviesResponse response = gson.fromJson(result, MoviesResponse.class);
+            try {
+                JSONObject resultJsonObject = new JSONObject(result);
+                // serialize the json to Movies array
+                Gson gson = new Gson();
+                Movie [] movies = gson.fromJson(resultJsonObject.getJSONArray("results").toString()
+                        , Movie[].class);
 
-            return response.movies;
+                return Arrays.asList(movies);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -93,7 +93,7 @@ public final class TMDBServices {
 
         String result = null;
         try {
-            result = NetworkUtil.sendGetRequest(url);
+            result = NetworkUtils.sendGetRequest(url);
         } catch (IOException e) {
             e.printStackTrace();
         }

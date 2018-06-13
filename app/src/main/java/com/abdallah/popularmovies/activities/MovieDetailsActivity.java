@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
@@ -25,8 +26,6 @@ import butterknife.ButterKnife;
 public class MovieDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
-
-    public static final String EXTRA_MOVIE_ID = "MovieID";
 
     private Movie movie;
 
@@ -49,7 +48,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        long movieId = intent.getLongExtra(EXTRA_MOVIE_ID, -1);
+        long movieId = intent.getLongExtra(MoviesActivity.EXTRA_MOVIE_ID, -1);
 
         loadMovieDetails(movieId);
     }
@@ -63,7 +62,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
             movieDetailsLayout.setVisibility(View.INVISIBLE);
             loadingMovieDetailsProgressBar.setVisibility(View.VISIBLE);
         }
@@ -82,27 +80,33 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Movie movie) {
-            super.onPostExecute(movie);
-
-            titleTextView.setText(movie.getTitle());
-
-            String posterUrl = TMDBServices.IMG_BASE_URL + movie.getPosterPath();
-            Picasso.get()
-                    .load(posterUrl)
-                    .into(moviePosterImageView);
-
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY");
-            releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
-
-            runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
-
-            ratingTextView.setText(Float.toString(movie.getVoteAverage()));
-
-            overviewTextView.setText(movie.getOverview());
-
-
             loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
-            movieDetailsLayout.setVisibility(View.VISIBLE);
+
+            if (movie != null) {
+                titleTextView.setText(movie.getTitle());
+
+                String posterUrl = TMDBServices.IMG_BASE_URL + movie.getPosterPath();
+                Picasso.get()
+                        .load(posterUrl)
+                        .into(moviePosterImageView);
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY");
+                releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
+
+                runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
+
+                ratingTextView.setText(Float.toString(movie.getVoteAverage()));
+
+                overviewTextView.setText(movie.getOverview());
+
+
+                movieDetailsLayout.setVisibility(View.VISIBLE);
+            }
+            else {
+                Log.d(TAG, "onPostExecute(): movie equals null");
+                Toast.makeText(MovieDetailsActivity.this, getString(R.string.load_movie_details_error_msg)
+                        , Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

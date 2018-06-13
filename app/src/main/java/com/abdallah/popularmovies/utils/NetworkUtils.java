@@ -1,5 +1,9 @@
 package com.abdallah.popularmovies.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -11,7 +15,7 @@ import okhttp3.Response;
 /**
  * Common network utilities using OkHttp
  */
-public final class NetworkUtil {
+public final class NetworkUtils {
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -34,7 +38,7 @@ public final class NetworkUtil {
     }
 
     /**
-     * Makes a POST request with the given json tho the given url and returns the response.
+     * Makes a POST request with the given json to the given url and returns the response.
      * @param url
      * @param json
      * @return
@@ -50,6 +54,18 @@ public final class NetworkUtil {
                 .build();
         Response response = client.newCall(request).execute();
         return response.body().string();
+    }
+
+    /**
+     * Utility function to return whether there's network connectivity or not.
+     * @param ctx activity's context
+     * @return true if the device has network connectivity, false otherwise.
+     */
+    public static boolean isOnline(Context ctx) {
+        ConnectivityManager cm =
+                (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 }

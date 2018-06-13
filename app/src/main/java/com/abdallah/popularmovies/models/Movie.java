@@ -8,23 +8,38 @@ import java.util.Date;
 public class Movie {
 
     private long id;
+
     private String title;
+
     private String overview;  // also called plot synopsis
+
     private String tagline;
 
     @SerializedName("backdrop_path")
     private String backdropPath;
+
     @SerializedName("poster_path")
     private String posterPath;
+
     private double budget;
+
     @SerializedName("original_language")
     private String originalLanguage;
+
     @SerializedName("release_date")
     private Date releaseDate;
+
     private int runtime;
+
     @SerializedName("vote_average")
     private float voteAverage;
+
     private boolean adult;
+
+    @SerializedName("imdb_id")
+    private String imdbId;
+
+    private int revenue;
 
 
     public Movie() {
@@ -117,5 +132,29 @@ public class Movie {
 
     public void setVoteAverage(float voteAverage) {
         this.voteAverage = voteAverage;
+    }
+
+    public boolean isAdult() {
+        return adult;
+    }
+
+    public void setAdult(boolean adult) {
+        this.adult = adult;
+    }
+
+    public String getImdbId() {
+        return imdbId;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
+    }
+
+    public int getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(int revenue) {
+        this.revenue = revenue;
     }
 }
