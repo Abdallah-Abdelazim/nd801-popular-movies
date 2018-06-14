@@ -1,8 +1,4 @@
-package com.abdallah.popularmovies.utils;
-
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+package com.abdallah.popularmovies.utils.network;
 
 import java.io.IOException;
 
@@ -15,7 +11,7 @@ import okhttp3.Response;
 /**
  * Common network utilities using OkHttp
  */
-public final class NetworkUtils {
+public final class OkHttpNetworkUtils {
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
@@ -54,18 +50,6 @@ public final class NetworkUtils {
                 .build();
         Response response = client.newCall(request).execute();
         return response.body().string();
-    }
-
-    /**
-     * Utility function to return whether there's network connectivity or not.
-     * @param ctx activity's context
-     * @return true if the device has network connectivity, false otherwise.
-     */
-    public static boolean isOnline(Context ctx) {
-        ConnectivityManager cm =
-                (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 }

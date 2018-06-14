@@ -1,20 +1,17 @@
 package com.abdallah.popularmovies.api;
 
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
 import com.abdallah.popularmovies.BuildConfig;
-import com.abdallah.popularmovies.models.Movie;
-import com.abdallah.popularmovies.utils.NetworkUtils;
-import com.google.gson.Gson;
+import com.abdallah.popularmovies.utils.network.RequestQueueSingleton;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 public final class TMDBServices {
 
@@ -36,8 +33,10 @@ public final class TMDBServices {
 
     public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185";
 
+    private TMDBServices() {/* prevent instantiation */};
 
-    public static List<Movie> getMovies(int moviesSortingMethod, int page) {
+    public static void requestMovies(int moviesSortingMethod, int page, Context ctx
+            , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {
 
         String path;
         switch (moviesSortingMethod) {
@@ -48,8 +47,8 @@ public final class TMDBServices {
                 path = HIGHEST_RATED_MOVIES_PATH;
                 break;
             default:
-                Log.d(TAG, "getMovies(): Undefined sorting method");
-                return null;
+                Log.d(TAG, "requestMovies(): Undefined sorting method");
+                return;
         }
 
         String url = Uri.parse(BASE_URL)
@@ -60,30 +59,14 @@ public final class TMDBServices {
                 .build()
                 .toString();
 
-        String result = null;
-        try {
-            result = NetworkUtils.sendGetRequest(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null
+                , onSuccess, onError);
 
-        if (result != null) {
-            try {
-                JSONObject resultJsonObject = new JSONObject(result);
-                // serialize the json to Movies array
-                Gson gson = new Gson();
-                Movie [] movies = gson.fromJson(resultJsonObject.getJSONArray("results").toString()
-                        , Movie[].class);
-
-                return Arrays.asList(movies);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
+        RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
     }
 
-    public static Movie getMovieDetails(long movieId) {
+    public static void requestMovieDetails(long movieId, Context ctx
+            , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {
         String url = Uri.parse(BASE_URL).buildUpon()
                 .appendEncodedPath(MOVIE_DETAILS_PATH)
                 .appendEncodedPath(Long.toString(movieId))
@@ -91,21 +74,10 @@ public final class TMDBServices {
                 .build()
                 .toString();
 
-        String result = null;
-        try {
-            result = NetworkUtils.sendGetRequest(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null
+                , onSuccess, onError);
 
-        if (result != null) {
-            // serialize the json to Movie object
-            Gson gson = new Gson();
-            Movie movie = gson.fromJson(result, Movie.class);
-            return movie;
-        }
-
-        return null;
+        RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
     }
 
 }

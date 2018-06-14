@@ -1,13 +1,11 @@
 package com.abdallah.popularmovies.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +18,16 @@ import com.abdallah.popularmovies.adapters.EndlessRecyclerOnScrollListener;
 import com.abdallah.popularmovies.adapters.MoviesAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Movie;
-import com.abdallah.popularmovies.utils.NetworkUtils;
+import com.abdallah.popularmovies.utils.network.NetworkUtils;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindInt;
@@ -52,8 +57,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
     private int recyclerViewVisibleThreshold = 10;
 
-    private boolean isConnected = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,15 +65,8 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        // check whether there's network connectivity or not
-        if (NetworkUtils.isOnline(this)) {
-            configureMoviesRecyclerView();
-        }
-        else {
-            isConnected = false;
-            moviesRecyclerView.setVisibility(View.INVISIBLE);
-            noConnectivityMsgLinearLayout.setVisibility(View.VISIBLE);
-        }
+
+        configureMoviesRecyclerView();
     }
 
     private void configureMoviesRecyclerView() {
@@ -98,7 +94,42 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     }
 
     private void loadMovies() {
-        new MoviesQueryTask().execute(moviesSortingMethod, currentPage);
+
+        loadingMoviesProgressBar.setVisibility(View.VISIBLE);
+
+        TMDBServices.requestMovies(moviesSortingMethod, currentPage, this
+                , new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        // serialize the json response to Movies array
+                        Gson gson = new Gson();
+                        try {
+                            Movie [] moviesArray = gson.fromJson(response.getJSONArray("results").toString()
+                                    , Movie[].class);
+                            List<Movie> movies = Arrays.asList(moviesArray);
+                            moviesList.addAll(movies);
+                            adapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MoviesActivity.this, getString(R.string.load_movies_error_msg)
+                                    , Toast.LENGTH_SHORT).show();
+                        }
+
+                        loadingMoviesProgressBar.setVisibility(View.INVISIBLE);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+
+                        loadingMoviesProgressBar.setVisibility(View.INVISIBLE);
+                        noConnectivityMsgLinearLayout.setVisibility(View.VISIBLE);
+                        Toast.makeText(MoviesActivity.this, getString(R.string.load_movies_error_msg)
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void resetMoviesRecyclerViewAfterChangingSorting() {
@@ -121,9 +152,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     @OnClick(R.id.btn_retry_loading)
     public void retryLoadingMovies() {
         if (NetworkUtils.isOnline(this)) {
-            isConnected = true;
             noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
-            moviesRecyclerView.setVisibility(View.VISIBLE);
 
             configureMoviesRecyclerView();
         }
@@ -146,26 +175,22 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
         switch (id) {
             case R.id.action_sort_by_popularity:
-                if (!isConnected) {
-                    Toast.makeText(this, getString(R.string.no_internet_toast), Toast.LENGTH_SHORT).show();
-                    return super.onOptionsItemSelected(item);
-                }
                 item.setChecked(true);
 
                 moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY;
+
+                noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
 
                 resetMoviesRecyclerViewAfterChangingSorting();
 
                 return true;
 
             case R.id.action_sort_by_rating:
-                if (!isConnected) {
-                    Toast.makeText(this, getString(R.string.no_internet_toast), Toast.LENGTH_SHORT).show();
-                    return super.onOptionsItemSelected(item);
-                }
                 item.setChecked(true);
 
                 moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_RATING;
+
+                noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
 
                 resetMoviesRecyclerViewAfterChangingSorting();
 
@@ -189,44 +214,4 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     }
 
 
-    private class MoviesQueryTask extends AsyncTask<Integer, Void, List<Movie> > {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loadingMoviesProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected List<Movie> doInBackground(Integer... integers) {
-            if (integers.length == 2) {
-                int sortingMethod = integers[0];
-                int page = integers[1];
-
-                List<Movie> movies = TMDBServices.getMovies(sortingMethod, page);
-                return movies;
-            }
-            else {
-                Log.d(TAG, "doInBackground() :Wrong method parameters.");
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(List<Movie> movies) {
-            loadingMoviesProgressBar.setVisibility(View.INVISIBLE);
-
-            if (movies != null) {
-                moviesList.addAll(movies);
-                adapter.notifyDataSetChanged();
-            }
-            else {
-                Log.d(TAG, "onPostExecute(): moviesList equals null");
-                Toast.makeText(MoviesActivity.this
-                        , R.string.load_movies_error_msg, Toast.LENGTH_SHORT)
-                        .show();
-            }
-
-        }
-    }
 }

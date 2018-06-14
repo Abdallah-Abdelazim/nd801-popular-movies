@@ -4,7 +4,7 @@
     <string name="action_sort_by_popularity">Sort by popularity</string>
     <string name="action_sort_by_rating">Sort by rating</string>
     <string name="action_sort_by">Sort movies by</string>
-    <string name="no_network_connectivity_message">No Internet connection. Make sure WI-FI or cellular data is turned on, then try again.</string>
+    <string name="no_network_connectivity_message">No Internet connection!</string>
     <string name="retry_loading_button_text">Retry</string>
     <string name="no_internet_toast">Please connect to the Internet first</string>
     <string name="load_movies_error_msg">Error occurred while trying to load movies!</string>

@@ -1,7 +1,6 @@
 package com.abdallah.popularmovies.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +16,18 @@ import android.widget.Toast;
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Movie;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
@@ -53,73 +58,63 @@ public class MovieDetailsActivity extends AppCompatActivity {
         long movieId = intent.getLongExtra(MoviesActivity.EXTRA_MOVIE_ID, -1);
 
         loadMovieDetails(movieId);
-
-        markAsFavoriteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                markMovieAsFavorite();
-            }
-        });
     }
 
-    private void markMovieAsFavorite() {
+    @OnClick(R.id.btn_favorite)
+    public void markMovieAsFavoriteOrUnfavorite() {
 
     }
 
     private void loadMovieDetails(long movieId) {
-        new GetMovieDetailsTask().execute(movieId);
-    }
+
+        movieDetailsLayout.setVisibility(View.INVISIBLE);
+        loadingMovieDetailsProgressBar.setVisibility(View.VISIBLE);
+
+        TMDBServices.requestMovieDetails(movieId, this
+                , new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // serialize the json to Movie object
+                Gson gson = new Gson();
+                movie = gson.fromJson(response.toString(), Movie.class);
+
+                if (movie != null) {
+                    titleTextView.setText(movie.getTitle());
+
+                    String posterUrl = TMDBServices.IMG_BASE_URL + movie.getPosterPath();
+                    Picasso.get()
+                            .load(posterUrl)
+                            .into(moviePosterImageView);
+
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+                    releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
+
+                    runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
+
+                    ratingTextView.setText(Float.toString(movie.getVoteAverage()));
+
+                    overviewTextView.setText(movie.getOverview());
 
 
-    private class GetMovieDetailsTask extends AsyncTask<Long, Void, Movie> {
+                    movieDetailsLayout.setVisibility(View.VISIBLE);
+                }
+                else {
+                    Log.d(TAG, "movie equals null");
+                    Toast.makeText(MovieDetailsActivity.this, getString(R.string.load_movie_details_error_msg)
+                            , Toast.LENGTH_SHORT).show();
+                }
 
-        @Override
-        protected void onPreExecute() {
-            movieDetailsLayout.setVisibility(View.INVISIBLE);
-            loadingMovieDetailsProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Movie doInBackground(Long... longs) {
-            if (longs.length == 1) {
-                long movieId = longs[0];
-                return TMDBServices.getMovieDetails(movieId);
+                loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
             }
-            else {
-                Log.d(TAG, "doInBackground(): Wrong method parameters.");
-                return null;
-            }
-        }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
 
-        @Override
-        protected void onPostExecute(Movie movie) {
-            loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
-
-            if (movie != null) {
-                titleTextView.setText(movie.getTitle());
-
-                String posterUrl = TMDBServices.IMG_BASE_URL + movie.getPosterPath();
-                Picasso.get()
-                        .load(posterUrl)
-                        .into(moviePosterImageView);
-
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
-                releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
-
-                runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
-
-                ratingTextView.setText(Float.toString(movie.getVoteAverage()));
-
-                overviewTextView.setText(movie.getOverview());
-
-
-                movieDetailsLayout.setVisibility(View.VISIBLE);
-            }
-            else {
-                Log.d(TAG, "onPostExecute(): movie equals null");
+                loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(MovieDetailsActivity.this, getString(R.string.load_movie_details_error_msg)
                         , Toast.LENGTH_SHORT).show();
             }
-        }
+        });
     }
 }

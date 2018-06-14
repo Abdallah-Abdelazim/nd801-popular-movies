@@ -17,9 +17,10 @@
 
     <LinearLayout
         android:id="@+id/ll_no_connectivity"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="bottom|center"
+        android:background="@android:color/background_light"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/no_connectivity_message_linear_layout_padding"
