@@ -103,7 +103,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         .load(posterUrl)
                         .into(moviePosterImageView);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
                 releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
 
                 runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
