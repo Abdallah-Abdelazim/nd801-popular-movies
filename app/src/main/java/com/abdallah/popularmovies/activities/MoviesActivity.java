@@ -50,7 +50,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     private int moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
     private int currentPage = 1;
 
-    private int recyclerViewVisibleThreshold = 5;
+    private int recyclerViewVisibleThreshold = 10;
 
     private boolean isConnected = true;
 
