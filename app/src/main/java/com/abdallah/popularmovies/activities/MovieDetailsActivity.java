@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.tv_release_date) TextView releaseDateTextView;
     @BindView(R.id.tv_runtime) TextView runtimeTextView;
     @BindView(R.id.tv_rating) TextView ratingTextView;
+    @BindView(R.id.btn_favorite) Button markAsFavoriteButton;
     @BindView(R.id.tv_overview) TextView overviewTextView;
     @BindView(R.id.movie_details_layout) ConstraintLayout movieDetailsLayout;
     @BindView(R.id.pb_loading_movie_details) ProgressBar loadingMovieDetailsProgressBar;
@@ -51,6 +53,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
         long movieId = intent.getLongExtra(MoviesActivity.EXTRA_MOVIE_ID, -1);
 
         loadMovieDetails(movieId);
+
+        markAsFavoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markMovieAsFavorite();
+            }
+        });
+    }
+
+    private void markMovieAsFavorite() {
+
     }
 
     private void loadMovieDetails(long movieId) {

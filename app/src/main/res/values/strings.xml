@@ -12,4 +12,7 @@
     <string name="total_vote">/10</string>
     <string name="title_activity_movie_details">Movie Details</string>
     <string name="movie_runtime">%1$d min.</string>
+    <string name="mark_as_favorite_button_text">Mark as Favorite</string>
+    <string name="mark_as_unfavorite_button_text">Mark as Unfavorite</string>
+    <string name="overview_label">Overview</string>
 </resources>
