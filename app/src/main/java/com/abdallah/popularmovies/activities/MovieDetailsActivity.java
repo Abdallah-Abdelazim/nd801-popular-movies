@@ -1,6 +1,8 @@
 package com.abdallah.popularmovies.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -62,6 +64,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_favorite)
     public void markMovieAsFavoriteOrUnfavorite() {
+
+        // change button to become "unfavorite" button
+        markAsFavoriteButton.setText(R.string.mark_as_unfavorite_button_text);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            // API level 17 and above
+            markAsFavoriteButton.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    getResources().getDrawable(R.drawable.ic_heart), null, null, null);
+        }
+        else {
+            markAsFavoriteButton.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart)
+                    , null, null, null);
+        }
+
 
     }
 

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,6 +56,8 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     private int moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
     private int currentPage = 1;
 
+    private static final String STATE_SORTING_METHOD = "sorting_method";
+
     private int recyclerViewVisibleThreshold = 10;
 
     @Override
@@ -65,8 +68,20 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
+        if (savedInstanceState != null) {
+            moviesSortingMethod = savedInstanceState.getInt(STATE_SORTING_METHOD);
+
+            Log.d(TAG, "restored sorting method = " + moviesSortingMethod);
+        }
 
         configureMoviesRecyclerView();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(STATE_SORTING_METHOD, moviesSortingMethod);
+
+        super.onSaveInstanceState(outState);
     }
 
     private void configureMoviesRecyclerView() {
@@ -154,6 +169,8 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
         if (NetworkUtils.isOnline(this)) {
             noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
 
+            currentPage = 1;
+
             configureMoviesRecyclerView();
         }
     }
@@ -162,6 +179,14 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // check the menu item corresponding to the sorting method
+        if (moviesSortingMethod == TMDBServices.SORT_MOVIES_BY_POPULARITY) {
+            menu.findItem(R.id.action_sort_by_popularity).setChecked(true);
+        }
+        else if (moviesSortingMethod == TMDBServices.SORT_MOVIES_BY_RATING) {
+            menu.findItem(R.id.action_sort_by_rating).setChecked(true);
+        }
 
         return true;
     }

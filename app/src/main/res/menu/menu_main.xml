@@ -14,7 +14,6 @@
                 android:checkableBehavior="single">
                 <item
                     android:id="@+id/action_sort_by_popularity"
-                    android:checked="true"
                     android:orderInCategory="100"
                     android:title="@string/action_sort_by_popularity"
                     app:showAsAction="never" />

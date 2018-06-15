@@ -23,6 +23,8 @@ public final class TMDBServices {
     private final static String MOST_POPULAR_MOVIES_PATH = "movie/popular";
     private final static String HIGHEST_RATED_MOVIES_PATH = "movie/top_rated";
     private final static String MOVIE_DETAILS_PATH = "movie";
+    private final static String MOVIE_VIDEOS_PATH = "videos";
+    private final static String MOVIE_REVIEWS_PATH = "reviews";
 
     private final static String API_KEY_PARAM = "api_key";
     private final static String PAGE_PARAM = "page";
@@ -70,6 +72,38 @@ public final class TMDBServices {
         String url = Uri.parse(BASE_URL).buildUpon()
                 .appendEncodedPath(MOVIE_DETAILS_PATH)
                 .appendEncodedPath(Long.toString(movieId))
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .build()
+                .toString();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null
+                , onSuccess, onError);
+
+        RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
+    }
+
+    public static void requestMovieVideos(long movieId, Context ctx
+            , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {
+        String url = Uri.parse(BASE_URL).buildUpon()
+                .appendEncodedPath(MOVIE_DETAILS_PATH)
+                .appendEncodedPath(Long.toString(movieId))
+                .appendEncodedPath(MOVIE_VIDEOS_PATH)
+                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .build()
+                .toString();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null
+                , onSuccess, onError);
+
+        RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
+    }
+
+    public static void requestMovieReviews(long movieId, Context ctx
+            , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {
+        String url = Uri.parse(BASE_URL).buildUpon()
+                .appendEncodedPath(MOVIE_DETAILS_PATH)
+                .appendEncodedPath(Long.toString(movieId))
+                .appendEncodedPath(MOVIE_REVIEWS_PATH)
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build()
                 .toString();

@@ -22,9 +22,14 @@
         android:layout_gravity="bottom|center"
         android:background="@android:color/background_light"
         android:gravity="center"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="@dimen/no_connectivity_message_linear_layout_padding"
         android:visibility="invisible">
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tv_no_connectivity"
@@ -35,12 +40,22 @@
             android:textSize="18sp"
             android:visibility="visible" />
 
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
         <Button
             android:id="@+id/btn_retry_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/retry_loading_button_text"
             android:visibility="visible" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <ProgressBar
