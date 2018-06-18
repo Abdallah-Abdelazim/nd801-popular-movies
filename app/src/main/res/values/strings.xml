@@ -26,4 +26,5 @@
     <string name="mark_as_favorite_button_text">Mark as Favorite</string>
     <string name="mark_as_unfavorite_button_text">Mark as Unfavorite</string>
     <string name="overview_label">Overview</string>
+    <string name="videos_label">Videos</string>
 </resources>
