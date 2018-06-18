@@ -2,6 +2,7 @@ package com.abdallah.popularmovies.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,8 +20,9 @@ import com.abdallah.popularmovies.adapters.EndlessRecyclerOnScrollListener;
 import com.abdallah.popularmovies.adapters.MoviesAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Movie;
-import com.abdallah.popularmovies.utils.network.NetworkUtils;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 
@@ -34,7 +36,6 @@ import java.util.List;
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.RecyclerViewItemClickListener {
 
@@ -44,7 +45,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
     @BindView(R.id.rv_movies) RecyclerView moviesRecyclerView;
     @BindView(R.id.loading_movies_pb) ProgressBar loadingMoviesProgressBar;
-    @BindView(R.id.ll_no_connectivity) LinearLayout noConnectivityMsgLinearLayout;
+    @BindView(R.id.ll_empty_list) LinearLayout emptyMoviesListLinearLayout;
 
     @BindInt(R.integer.grid_span_count) int gridSpanCount;
 
@@ -60,10 +61,12 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
     private int recyclerViewVisibleThreshold = 10;
 
+    private Snackbar errorSnackbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movies);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
@@ -111,6 +114,10 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     private void loadMovies() {
 
         loadingMoviesProgressBar.setVisibility(View.VISIBLE);
+        emptyMoviesListLinearLayout.setVisibility(View.INVISIBLE);
+        if (errorSnackbar != null) {
+            errorSnackbar.dismiss();
+        }
 
         TMDBServices.requestMovies(moviesSortingMethod, currentPage, this
                 , new Response.Listener<JSONObject>() {
@@ -137,14 +144,41 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
+                        Log.d(TAG, error.toString());
 
-                        loadingMoviesProgressBar.setVisibility(View.INVISIBLE);
-                        noConnectivityMsgLinearLayout.setVisibility(View.VISIBLE);
-                        Toast.makeText(MoviesActivity.this, getString(R.string.load_movies_error_msg)
-                                , Toast.LENGTH_SHORT).show();
+                        displayLoadError(error);
+
                     }
                 });
+    }
+
+    private void displayLoadError(VolleyError error) {
+        String errorMsg;
+        if (error instanceof NoConnectionError) {
+            errorMsg = getString(R.string.no_connection_error_message);
+        }
+        else if (error instanceof TimeoutError) {
+            errorMsg = getString(R.string.connection_timeout_error_message);
+        }
+        else {
+            errorMsg = getString(R.string.load_movies_error_msg);
+        }
+
+        loadingMoviesProgressBar.setVisibility(View.INVISIBLE);
+
+        errorSnackbar = Snackbar.make(findViewById(R.id.coordinator_layout)
+                , errorMsg, Snackbar.LENGTH_INDEFINITE);
+        errorSnackbar.setAction(R.string.retry_loading_text, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMovies();
+            }
+        });
+        errorSnackbar.show();
+
+        if (adapter.getItemCount() == 0) {
+            emptyMoviesListLinearLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void resetMoviesRecyclerViewAfterChangingSorting() {
@@ -162,17 +196,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
                 loadMovies();
             }
         });
-    }
-
-    @OnClick(R.id.btn_retry_loading)
-    public void retryLoadingMovies() {
-        if (NetworkUtils.isOnline(this)) {
-            noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
-
-            currentPage = 1;
-
-            configureMoviesRecyclerView();
-        }
     }
 
     @Override
@@ -204,8 +227,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
                 moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY;
 
-                noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
-
                 resetMoviesRecyclerViewAfterChangingSorting();
 
                 return true;
@@ -214,8 +235,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
                 item.setChecked(true);
 
                 moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_RATING;
-
-                noConnectivityMsgLinearLayout.setVisibility(View.INVISIBLE);
 
                 resetMoviesRecyclerViewAfterChangingSorting();
 

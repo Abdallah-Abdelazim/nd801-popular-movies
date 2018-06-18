@@ -11,14 +11,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Movie;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -35,8 +39,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
 
-    private Movie movie;
-
     @BindView(R.id.tv_title) TextView titleTextView;
     @BindView(R.id.iv_movie_poster) ImageView moviePosterImageView;
     @BindView(R.id.tv_release_date) TextView releaseDateTextView;
@@ -44,8 +46,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.tv_rating) TextView ratingTextView;
     @BindView(R.id.btn_favorite) Button markAsFavoriteButton;
     @BindView(R.id.tv_overview) TextView overviewTextView;
-    @BindView(R.id.movie_details_layout) ConstraintLayout movieDetailsLayout;
+    @BindView(R.id.movie_details_layout) ScrollView movieDetailsLayout;
     @BindView(R.id.pb_loading_movie_details) ProgressBar loadingMovieDetailsProgressBar;
+    @BindView(R.id.ll_load_error) LinearLayout loadErrorLinearLayout;
+    @BindView(R.id.tv_error_msg) TextView errorMsgTextView;
+
+    private long movieId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +63,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        long movieId = intent.getLongExtra(MoviesActivity.EXTRA_MOVIE_ID, -1);
+        movieId = intent.getLongExtra(MoviesActivity.EXTRA_MOVIE_ID, -1);
 
-        loadMovieDetails(movieId);
+        loadMovieDetails();
     }
 
     @OnClick(R.id.btn_favorite)
@@ -80,9 +86,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void loadMovieDetails(long movieId) {
+    private void loadMovieDetails() {
 
         movieDetailsLayout.setVisibility(View.INVISIBLE);
+        loadErrorLinearLayout.setVisibility(View.INVISIBLE);
         loadingMovieDetailsProgressBar.setVisibility(View.VISIBLE);
 
         TMDBServices.requestMovieDetails(movieId, this
@@ -91,7 +98,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 // serialize the json to Movie object
                 Gson gson = new Gson();
-                movie = gson.fromJson(response.toString(), Movie.class);
+                Movie movie = gson.fromJson(response.toString(), Movie.class);
 
                 if (movie != null) {
                     titleTextView.setText(movie.getTitle());
@@ -114,22 +121,50 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     movieDetailsLayout.setVisibility(View.VISIBLE);
                 }
                 else {
-                    Log.d(TAG, "movie equals null");
-                    Toast.makeText(MovieDetailsActivity.this, getString(R.string.load_movie_details_error_msg)
-                            , Toast.LENGTH_SHORT).show();
+                    // response parse error
+                    Log.d(TAG, "Gson parsed movie equals null");
+
+                    displayLoadError(getString(R.string.load_movie_details_error_msg));
                 }
 
                 loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                Log.d(TAG, error.toString());
 
-                loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(MovieDetailsActivity.this, getString(R.string.load_movie_details_error_msg)
-                        , Toast.LENGTH_SHORT).show();
+                displayLoadError(error);
             }
         });
+    }
+
+    private void displayLoadError(VolleyError error) {
+        String errorMsg;
+        if (error instanceof NoConnectionError) {
+            errorMsg = getString(R.string.no_connection_error_message);
+        }
+        else if (error instanceof TimeoutError) {
+            errorMsg = getString(R.string.connection_timeout_error_message);
+        }
+        else {
+            errorMsg = getString(R.string.load_movie_details_error_msg);
+        }
+
+        loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
+        errorMsgTextView.setText(errorMsg);
+        loadErrorLinearLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void displayLoadError(String errorMsg) {
+        loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
+        errorMsgTextView.setText(errorMsg);
+        loadErrorLinearLayout.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.btn_retry_load)
+    void retryLoadMovieDetails() {
+        loadMovieDetails();
     }
 }

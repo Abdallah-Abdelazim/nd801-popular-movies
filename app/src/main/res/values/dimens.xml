@@ -1,4 +1,4 @@
 <resources>
-    <dimen name="no_connectivity_message_linear_layout_padding">8dp</dimen>
     <dimen name="progress_bar_dimension">64dp</dimen>
+    <dimen name="messages_image_dimension">96dp</dimen>
 </resources>

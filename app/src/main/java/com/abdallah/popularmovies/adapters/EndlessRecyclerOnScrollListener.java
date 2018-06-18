@@ -26,8 +26,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
 
     private int visibleThreshold = 5;
 
-    public EndlessRecyclerOnScrollListener() {
-    }
+    public EndlessRecyclerOnScrollListener() {}
 
     public EndlessRecyclerOnScrollListener(int visibleThreshold) {
         this.visibleThreshold = visibleThreshold;
@@ -62,6 +61,15 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
                 loading = true;
             }
         }
+    }
+
+    public void reset() {
+        previousTotalItemCount = 0;
+        loading = true;
+    }
+
+    public void setVisibleThreshold(int visibleThreshold) {
+        this.visibleThreshold = visibleThreshold;
     }
 
     public abstract void onLoadMore();

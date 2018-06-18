@@ -1,16 +1,27 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+
+    <!-- activities titles -->
+    <string name="title_activity_movie_details">Movie Details</string>
+
+    <!-- Content Descriptions -->
     <string name="movie_poster_imageview_content_description">Movie Poster Image</string>
+
+    <!-- Menu -->
     <string name="action_sort_by_popularity">Sort by popularity</string>
     <string name="action_sort_by_rating">Sort by rating</string>
     <string name="action_sort_by">Sort movies by</string>
-    <string name="no_network_connectivity_message">No Internet connection!</string>
-    <string name="retry_loading_button_text">Retry</string>
-    <string name="no_internet_toast">Please connect to the Internet first</string>
+
+    <!-- Error Messages -->
+    <string name="no_connection_error_message">No Internet Connection!</string>
+    <string name="connection_timeout_error_message">Connection Timed Out!</string>
     <string name="load_movies_error_msg">Error occurred while trying to load movies!</string>
     <string name="load_movie_details_error_msg">Error occurred while trying to load movie details!</string>
+    <string name="empty_movies_list_msg">No movies to display!</string>
+
+    <!-- Views text -->
+    <string name="retry_loading_text">Retry</string>
     <string name="total_vote">/10</string>
-    <string name="title_activity_movie_details">Movie Details</string>
     <string name="movie_runtime">%1$d min.</string>
     <string name="mark_as_favorite_button_text">Mark as Favorite</string>
     <string name="mark_as_unfavorite_button_text">Mark as Unfavorite</string>
