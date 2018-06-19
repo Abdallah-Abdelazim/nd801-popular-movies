@@ -32,8 +32,11 @@
     <string name="mark_as_unfavorite_button_text">Mark as Unfavorite</string>
     <string name="overview_label">Overview</string>
     <string name="videos_label">Videos</string>
+    <string name="reviews_label">Reviews</string>
 
     <!-- Misc -->
     <string name="youtube_video_base_link" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
+    <string name="show_more_text">"  Show more"</string>
+    <string name="show_less_text">"  Show less"</string>
 
 </resources>

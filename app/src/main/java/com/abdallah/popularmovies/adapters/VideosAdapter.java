@@ -34,8 +34,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String videoName = videos[position].getName();
-        holder.videoNameTextView.setText(videoName);
+        Video vid = videos[position];
+        holder.videoNameTextView.setText(vid.getName());
     }
 
     @Override

@@ -19,9 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
+import com.abdallah.popularmovies.adapters.ReviewsAdapter;
 import com.abdallah.popularmovies.adapters.VideosAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Movie;
+import com.abdallah.popularmovies.models.Review;
 import com.abdallah.popularmovies.models.Video;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
@@ -53,6 +55,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.rv_videos) RecyclerView videosRecyclerView;
     @BindView(R.id.pb_loading_videos) ProgressBar loadingVideosProgressBar;
     @BindView(R.id.tv_videos_msg) TextView videosMsgTextView;
+    @BindView(R.id.rv_reviews) RecyclerView reviewsRecyclerView;
 
     @BindView(R.id.movie_details_layout) ScrollView movieDetailsLayout;
 
@@ -64,6 +67,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private long movieId;
 
     private VideosAdapter videosAdapter;
+    private ReviewsAdapter reviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,8 +167,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 , new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // serialize the json to Result array
-
+                        // serialize the json to Videos array
                         try {
                             Gson gson = new Gson();
                             Video[] videos = gson.fromJson(response.getJSONArray("results").toString()
@@ -231,6 +234,59 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void loadMovieReviews() {
+
+        TMDBServices.requestMovieReviews(movieId, this
+                , new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // serialize the json into Review array
+                try {
+                    Gson gson = new Gson();
+                    Review [] reviews = gson.fromJson(response.getJSONArray("results").toString()
+                            , Review[].class);
+
+                    if (reviews != null) {
+
+                        if (reviews.length > 0) {
+                            // display the reviews in the recycler view
+
+                            reviewsRecyclerView.setHasFixedSize(false);
+
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(
+                                    MovieDetailsActivity.this);
+                            reviewsRecyclerView.setLayoutManager(layoutManager);
+
+                            reviewsAdapter = new ReviewsAdapter(reviews);
+                            reviewsRecyclerView.setAdapter(reviewsAdapter);
+
+
+
+                        }
+                        else {
+
+                        }
+                    }
+                    else {
+                        Log.d(TAG, "reviews array equals null");
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, e.toString());
+
+                }
+
+            }
+        }
+        , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, error.toString());
+
+
+            }
+        });
 
     }
 
