@@ -18,6 +18,11 @@
     <string name="load_movies_error_msg">Error occurred while trying to load movies!</string>
     <string name="load_movie_details_error_msg">Error occurred while trying to load movie details!</string>
     <string name="empty_movies_list_msg">No movies to display!</string>
+    <string name="no_videos_msg">There\'re no videos to display!</string>
+    <string name="error_loading_videos_msg">Couldn\'t load videos!</string>
+    <string name="no_reviews_msg">There\'re no reviews to display!</string>
+    <string name="error_loading_reviews_msg">Couldn\'t load reviews!</string>
+    <string name="error_open_url">Couldn\'t open the URL on your device!</string>
 
     <!-- Views text -->
     <string name="retry_loading_text">Retry</string>
@@ -27,4 +32,8 @@
     <string name="mark_as_unfavorite_button_text">Mark as Unfavorite</string>
     <string name="overview_label">Overview</string>
     <string name="videos_label">Videos</string>
+
+    <!-- Misc -->
+    <string name="youtube_video_base_link" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
+
 </resources>

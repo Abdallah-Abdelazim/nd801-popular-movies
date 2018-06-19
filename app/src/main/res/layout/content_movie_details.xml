@@ -202,6 +202,41 @@
                 tools:listitem="@layout/videos_recyclerview_item"
                 tools:itemCount="2" />
 
+            <ProgressBar
+                android:id="@+id/pb_loading_videos"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="@dimen/progress_bar_dimension"
+                android:layout_height="@dimen/progress_bar_dimension"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/rv_videos"
+                app:layout_constraintTop_toTopOf="@+id/rv_videos" />
+
+            <TextView
+                android:id="@+id/tv_videos_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/no_videos_msg"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/rv_videos"
+                app:layout_constraintStart_toStartOf="@+id/rv_videos"
+                app:layout_constraintTop_toTopOf="@+id/rv_videos" />
+
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
