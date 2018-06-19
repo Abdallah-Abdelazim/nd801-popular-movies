@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_empty_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:visibility="visible">
+
+    <ImageView
+        android:id="@+id/iv_empty_list"
+        android:layout_width="@dimen/messages_image_dimension"
+        android:layout_height="@dimen/messages_image_dimension"
+        app:srcCompat="@drawable/ic_movie_roll_red" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <TextView
+        android:id="@+id/tv_empty_list_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/empty_movies_list_msg"
+        android:textSize="18sp" />
+</LinearLayout>

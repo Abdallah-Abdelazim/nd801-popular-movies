@@ -15,29 +15,9 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <LinearLayout
-        android:id="@+id/ll_empty_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:visibility="invisible">
-
-        <ImageView
-            android:id="@+id/iv_empty_list"
-            android:layout_width="@dimen/messages_image_dimension"
-            android:layout_height="@dimen/messages_image_dimension"
-            app:srcCompat="@drawable/ic_movie_roll" />
-
-        <TextView
-            android:id="@+id/tv_empty_list_msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/empty_movies_list_msg"
-            android:textSize="18sp" />
-    </LinearLayout>
+    <include
+        layout="@layout/movies_empty_list_prompt"
+        android:visibility="invisible" />
 
     <ProgressBar
         android:id="@+id/loading_movies_pb"

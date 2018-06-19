@@ -1,4 +1,4 @@
 <resources>
     <dimen name="progress_bar_dimension">64dp</dimen>
-    <dimen name="messages_image_dimension">96dp</dimen>
+    <dimen name="messages_image_dimension">64dp</dimen>
 </resources>
