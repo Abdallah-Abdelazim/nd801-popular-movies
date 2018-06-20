@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -56,8 +58,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.pb_loading_videos) ProgressBar loadingVideosProgressBar;
     @BindView(R.id.tv_videos_msg) TextView videosMsgTextView;
     @BindView(R.id.rv_reviews) RecyclerView reviewsRecyclerView;
+    @BindView(R.id.pb_loading_reviews) ProgressBar loadingReviewsProgressBar;
+    @BindView(R.id.tv_reviews_msg) TextView reviewsMsgTextView;
 
-    @BindView(R.id.movie_details_layout) ScrollView movieDetailsLayout;
+    @BindView(R.id.movie_details_layout) NestedScrollView movieDetailsLayout;
 
     @BindView(R.id.pb_loading_movie_details) ProgressBar loadingMovieDetailsProgressBar;
 
@@ -235,6 +239,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private void loadMovieReviews() {
 
+        loadingReviewsProgressBar.setVisibility(View.VISIBLE);
+        reviewsMsgTextView.setVisibility(View.INVISIBLE);
+
         TMDBServices.requestMovieReviews(movieId, this
                 , new Response.Listener<JSONObject>() {
             @Override
@@ -259,24 +266,28 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             reviewsAdapter = new ReviewsAdapter(reviews);
                             reviewsRecyclerView.setAdapter(reviewsAdapter);
 
-
-
                         }
                         else {
-
+                            reviewsMsgTextView.setText(R.string.no_reviews_msg);
+                            reviewsMsgTextView.setVisibility(View.VISIBLE);
                         }
                     }
                     else {
                         Log.d(TAG, "reviews array equals null");
 
+                        reviewsMsgTextView.setText(R.string.error_loading_reviews_msg);
+                        reviewsMsgTextView.setVisibility(View.VISIBLE);
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.d(TAG, e.toString());
 
+                    reviewsMsgTextView.setText(R.string.error_loading_reviews_msg);
+                    reviewsMsgTextView.setVisibility(View.VISIBLE);
                 }
 
+                loadingReviewsProgressBar.setVisibility(View.INVISIBLE);
             }
         }
         , new Response.ErrorListener() {
@@ -284,7 +295,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, error.toString());
 
+                reviewsMsgTextView.setText(R.string.error_loading_reviews_msg);
+                reviewsMsgTextView.setVisibility(View.VISIBLE);
 
+                loadingReviewsProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 

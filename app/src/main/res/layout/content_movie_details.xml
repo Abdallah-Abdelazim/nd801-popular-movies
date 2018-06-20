@@ -10,7 +10,7 @@
     tools:context=".activities.MovieDetailsActivity"
     tools:showIn="@layout/activity_movie_details">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/movie_details_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -205,12 +205,12 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="@dimen/progress_bar_dimension"
                 android:layout_height="@dimen/progress_bar_dimension"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/rv_videos"
                 app:layout_constraintEnd_toEndOf="@+id/rv_videos"
@@ -221,12 +221,12 @@
                 android:id="@+id/tv_videos_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/no_videos_msg"
                 android:textSize="18sp"
                 android:visibility="invisible"
@@ -281,9 +281,44 @@
                 tools:listitem="@layout/reviews_recyclerview_item"
                 tools:itemCount="2" />
 
+            <ProgressBar
+                android:id="@+id/pb_loading_reviews"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="@dimen/progress_bar_dimension"
+                android:layout_height="@dimen/progress_bar_dimension"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/rv_reviews"
+                app:layout_constraintEnd_toEndOf="@+id/rv_reviews"
+                app:layout_constraintStart_toStartOf="@+id/rv_reviews"
+                app:layout_constraintTop_toTopOf="@+id/rv_reviews" />
+
+            <TextView
+                android:id="@+id/tv_reviews_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/no_reviews_msg"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/rv_reviews"
+                app:layout_constraintEnd_toEndOf="@+id/rv_reviews"
+                app:layout_constraintStart_toStartOf="@+id/rv_reviews"
+                app:layout_constraintTop_toTopOf="@+id/rv_reviews" />
+
         </android.support.constraint.ConstraintLayout>
 
-    </ScrollView>
+    </android.support.v4.widget.NestedScrollView>
 
     <include
         layout="@layout/movie_details_load_error_prompt"
