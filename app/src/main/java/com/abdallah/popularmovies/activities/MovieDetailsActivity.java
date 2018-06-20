@@ -330,6 +330,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @OnClick(R.id.btn_retry_load)
     void retryLoadMovieDetails() {
         loadMovieDetails();
+        loadMovieVideos();
+        loadMovieReviews();
     }
 
     public void openWebPage(String url) {
