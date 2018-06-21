@@ -184,6 +184,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                                     videosRecyclerView.setHasFixedSize(false);
 
+                                    videosRecyclerView.setNestedScrollingEnabled(false);
+
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(
                                             MovieDetailsActivity.this);
                                     videosRecyclerView.setLayoutManager(layoutManager);
@@ -258,6 +260,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             // display the reviews in the recycler view
 
                             reviewsRecyclerView.setHasFixedSize(false);
+
+                            reviewsRecyclerView.setNestedScrollingEnabled(false);
 
                             LinearLayoutManager layoutManager = new LinearLayoutManager(
                                     MovieDetailsActivity.this);
