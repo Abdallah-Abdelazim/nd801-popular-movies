@@ -21,7 +21,7 @@ public class Movie {
     @SerializedName("poster_path")
     private String posterPath;
 
-    private double budget;
+    private long budget;
 
     @SerializedName("original_language")
     private String originalLanguage;
@@ -39,7 +39,7 @@ public class Movie {
     @SerializedName("imdb_id")
     private String imdbId;
 
-    private int revenue;
+    private long revenue;
 
 
     public Movie() {
@@ -98,7 +98,7 @@ public class Movie {
         return budget;
     }
 
-    public void setBudget(double budget) {
+    public void setBudget(long budget) {
         this.budget = budget;
     }
 
@@ -150,7 +150,7 @@ public class Movie {
         this.imdbId = imdbId;
     }
 
-    public int getRevenue() {
+    public long getRevenue() {
         return revenue;
     }
 
