@@ -70,6 +70,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private long movieId;
 
+    private Movie movie;
     private VideosAdapter videosAdapter;
     private ReviewsAdapter reviewsAdapter;
 
@@ -120,7 +121,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 // serialize the json to Movie object
                 Gson gson = new Gson();
-                Movie movie = gson.fromJson(response.toString(), Movie.class);
+                movie = gson.fromJson(response.toString(), Movie.class);
 
                 if (movie != null) {
                     titleTextView.setText(movie.getTitle());
