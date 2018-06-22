@@ -198,7 +198,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
                 tools:itemCount="2"
-                tools:listitem="@layout/videos_recyclerview_item" />
+                tools:listitem="@layout/item_video" />
 
             <ProgressBar
                 android:id="@+id/pb_loading_videos"
@@ -278,7 +278,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
-                tools:listitem="@layout/reviews_recyclerview_item"
+                tools:listitem="@layout/item_review"
                 tools:itemCount="2" />
 
             <ProgressBar
@@ -321,7 +321,7 @@
     </android.support.v4.widget.NestedScrollView>
 
     <include
-        layout="@layout/movie_details_load_error_prompt"
+        layout="@layout/partial_movie_details_load_error"
         android:visibility="invisible" />
 
     <ProgressBar

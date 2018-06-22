@@ -201,7 +201,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.activity_movies, menu);
 
         // check the menu item corresponding to the sorting method
         if (moviesSortingMethod == TMDBServices.SORT_MOVIES_BY_POPULARITY) {

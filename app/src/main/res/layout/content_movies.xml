@@ -16,7 +16,7 @@
     </android.support.v7.widget.RecyclerView>
 
     <include
-        layout="@layout/movies_empty_list_prompt"
+        layout="@layout/partial_movies_empty_list_prompt"
         android:visibility="invisible" />
 
     <ProgressBar
