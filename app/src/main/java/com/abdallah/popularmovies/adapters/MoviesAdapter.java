@@ -43,7 +43,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Movie movie = movies.get(position);
 
-        String posterUrl = TMDBServices.IMG_BASE_URL + movie.getPosterPath();
+        String posterUrl = String.format(TMDBServices.IMG_BASE_URL, movie.getPosterPath());
         Picasso.get()
                 .load(posterUrl)
                 .into(holder.moviePosterImageView);

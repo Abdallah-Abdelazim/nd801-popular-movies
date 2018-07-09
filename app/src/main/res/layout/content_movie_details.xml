@@ -143,10 +143,10 @@
                 android:id="@+id/tv_overview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -155,7 +155,7 @@
                 tools:text="Determined to prove herself, Officer Judy Hopps, the first bunny on Zootopia's police force, jumps at the chance to crack her first case - even if it means partnering with scam-artist fox Nick Wilde to solve the mystery." />
 
             <View
-                android:id="@+id/divider"
+                android:id="@+id/divider1"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginEnd="16dp"
@@ -168,153 +168,37 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_overview" />
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:id="@+id/movie_videos_fragment_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/videos_label"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_videos"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
-                tools:itemCount="2"
-                tools:listitem="@layout/item_video" />
-
-            <ProgressBar
-                android:id="@+id/pb_loading_videos"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="@dimen/progress_bar_dimension"
-                android:layout_height="@dimen/progress_bar_dimension"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_videos"
-                app:layout_constraintEnd_toEndOf="@+id/rv_videos"
-                app:layout_constraintStart_toStartOf="@+id/rv_videos"
-                app:layout_constraintTop_toTopOf="@+id/rv_videos" />
-
-            <TextView
-                android:id="@+id/tv_videos_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/no_videos_msg"
-                android:textSize="18sp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_videos"
-                app:layout_constraintEnd_toEndOf="@+id/rv_videos"
-                app:layout_constraintStart_toStartOf="@+id/rv_videos"
-                app:layout_constraintTop_toTopOf="@+id/rv_videos" />
+                app:layout_constraintTop_toBottomOf="@id/divider1" />
 
             <View
-                android:id="@+id/divider3"
-                android:layout_width="0dp"
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rv_videos" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/reviews_label"
-                android:textSize="18sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+                app:layout_constraintTop_toBottomOf="@+id/movie_videos_fragment_container" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_reviews"
-                android:layout_width="0dp"
+            <FrameLayout
+                android:id="@+id/movie_reviews_fragment_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
-                tools:listitem="@layout/item_review"
-                tools:itemCount="2" />
-
-            <ProgressBar
-                android:id="@+id/pb_loading_reviews"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="@dimen/progress_bar_dimension"
-                android:layout_height="@dimen/progress_bar_dimension"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_reviews"
-                app:layout_constraintEnd_toEndOf="@+id/rv_reviews"
-                app:layout_constraintStart_toStartOf="@+id/rv_reviews"
-                app:layout_constraintTop_toTopOf="@+id/rv_reviews" />
-
-            <TextView
-                android:id="@+id/tv_reviews_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/no_reviews_msg"
-                android:textSize="18sp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_reviews"
-                app:layout_constraintEnd_toEndOf="@+id/rv_reviews"
-                app:layout_constraintStart_toStartOf="@+id/rv_reviews"
-                app:layout_constraintTop_toTopOf="@+id/rv_reviews" />
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -329,7 +213,8 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="@dimen/progress_bar_dimension"
         android:layout_height="@dimen/progress_bar_dimension"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
         android:visibility="invisible" />
 
 </FrameLayout>

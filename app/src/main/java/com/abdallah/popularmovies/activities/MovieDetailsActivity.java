@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,8 @@ import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.adapters.ReviewsAdapter;
 import com.abdallah.popularmovies.adapters.VideosAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
+import com.abdallah.popularmovies.fragments.MovieReviewsFragment;
+import com.abdallah.popularmovies.fragments.MovieVideosFragment;
 import com.abdallah.popularmovies.models.Movie;
 import com.abdallah.popularmovies.models.Review;
 import com.abdallah.popularmovies.models.Video;
@@ -36,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,15 +56,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.tv_rating) TextView ratingTextView;
     @BindView(R.id.btn_favorite) Button markAsFavoriteButton;
     @BindView(R.id.tv_overview) TextView overviewTextView;
-    @BindView(R.id.rv_videos) RecyclerView videosRecyclerView;
-    @BindView(R.id.pb_loading_videos) ProgressBar loadingVideosProgressBar;
-    @BindView(R.id.tv_videos_msg) TextView videosMsgTextView;
-    @BindView(R.id.rv_reviews) RecyclerView reviewsRecyclerView;
-    @BindView(R.id.pb_loading_reviews) ProgressBar loadingReviewsProgressBar;
-    @BindView(R.id.tv_reviews_msg) TextView reviewsMsgTextView;
 
     @BindView(R.id.movie_details_layout) NestedScrollView movieDetailsLayout;
-
     @BindView(R.id.pb_loading_movie_details) ProgressBar loadingMovieDetailsProgressBar;
 
     @BindView(R.id.ll_load_error) LinearLayout loadErrorLinearLayout;
@@ -69,8 +66,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private long movieId;
 
     private Movie movie;
-    private VideosAdapter videosAdapter;
-    private ReviewsAdapter reviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +79,24 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         movieId = intent.getLongExtra(MoviesActivity.EXTRA_MOVIE_ID, -1);
 
-        loadMovieDetails();
-        loadMovieVideos();
-        loadMovieReviews();
+        if (movieId != -1) {
+            loadMovieDetails();
+
+            if (savedInstanceState == null) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                // add MovieVideosFragment
+                fragmentManager.beginTransaction()
+                        .add(R.id.movie_videos_fragment_container, MovieVideosFragment.newInstance(movieId))
+                        .commit();
+                // add MovieReviewsFragment
+                fragmentManager.beginTransaction()
+                        .add(R.id.movie_reviews_fragment_container, MovieReviewsFragment.newInstance(movieId))
+                        .commit();
+            }
+        }
+        else {
+            Log.d(TAG, "movieId wasn't found in the intent extras!");
+        }
     }
 
     @OnClick(R.id.btn_favorite)
@@ -103,8 +113,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             markAsFavoriteButton.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart)
                     , null, null, null);
         }
-
-
     }
 
     private void loadMovieDetails() {
@@ -124,12 +132,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 if (movie != null) {
                     titleTextView.setText(movie.getTitle());
 
-                    String posterUrl = TMDBServices.IMG_BASE_URL + movie.getPosterPath();
+                    String posterUrl = String.format(TMDBServices.IMG_BASE_URL, movie.getPosterPath());
                     Picasso.get()
                             .load(posterUrl)
                             .into(moviePosterImageView);
 
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.US);
                     releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
 
                     runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
@@ -142,7 +150,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     movieDetailsLayout.setVisibility(View.VISIBLE);
                 }
                 else {
-                    // response parse error
+                    // null or empty response
                     Log.d(TAG, "Gson parsed movie equals null");
 
                     displayLoadError(getString(R.string.load_movie_details_error_msg));
@@ -159,152 +167,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 displayLoadError(error);
             }
         });
-    }
-
-    private void loadMovieVideos() {
-
-        loadingVideosProgressBar.setVisibility(View.VISIBLE);
-        videosMsgTextView.setVisibility(View.INVISIBLE);
-
-        TMDBServices.requestMovieVideos(this, movieId
-                , new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // serialize the json to Videos array
-                        try {
-                            Gson gson = new Gson();
-                            Video[] videos = gson.fromJson(response.getJSONArray("results").toString()
-                                    , Video[].class);
-
-                            if (videos != null) {
-
-                                if (videos.length > 0) {
-                                    // display the videos in the recycler view
-
-                                    videosRecyclerView.setHasFixedSize(false);
-
-                                    videosRecyclerView.setNestedScrollingEnabled(false);
-
-                                    LinearLayoutManager layoutManager = new LinearLayoutManager(
-                                            MovieDetailsActivity.this);
-                                    videosRecyclerView.setLayoutManager(layoutManager);
-
-                                    videosAdapter = new VideosAdapter(videos
-                                            , new VideosAdapter.ListItemClickListener() {
-                                        @Override
-                                        public void onListItemClicked(Video video) {
-                                            String videoLink =
-                                                    getString(R.string.youtube_video_base_link, video.getKey());
-                                            openWebPage(videoLink);
-                                        }
-                                    });
-                                    videosRecyclerView.setAdapter(videosAdapter);
-                                }
-                                else {
-                                    videosMsgTextView.setText(R.string.no_videos_msg);
-                                    videosMsgTextView.setVisibility(View.VISIBLE);
-                                }
-
-                            }
-                            else {
-                                Log.d(TAG, "videos equals null");
-
-                                videosMsgTextView.setText(R.string.error_loading_videos_msg);
-                                videosMsgTextView.setVisibility(View.VISIBLE);
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.d(TAG, e.toString());
-
-                            videosMsgTextView.setText(R.string.error_loading_videos_msg);
-                            videosMsgTextView.setVisibility(View.VISIBLE);
-                        }
-
-                        loadingVideosProgressBar.setVisibility(View.INVISIBLE);
-                    }
-                }
-                , new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, error.toString());
-
-                        videosMsgTextView.setText(R.string.error_loading_videos_msg);
-                        videosMsgTextView.setVisibility(View.VISIBLE);
-
-                        loadingVideosProgressBar.setVisibility(View.INVISIBLE);
-                    }
-                });
-
-    }
-
-    private void loadMovieReviews() {
-
-        loadingReviewsProgressBar.setVisibility(View.VISIBLE);
-        reviewsMsgTextView.setVisibility(View.INVISIBLE);
-
-        TMDBServices.requestMovieReviews(this, movieId
-                , new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                // serialize the json into Review array
-                try {
-                    Gson gson = new Gson();
-                    Review [] reviews = gson.fromJson(response.getJSONArray("results").toString()
-                            , Review[].class);
-
-                    if (reviews != null) {
-
-                        if (reviews.length > 0) {
-                            // display the reviews in the recycler view
-
-                            reviewsRecyclerView.setHasFixedSize(false);
-
-                            reviewsRecyclerView.setNestedScrollingEnabled(false);
-
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(
-                                    MovieDetailsActivity.this);
-                            reviewsRecyclerView.setLayoutManager(layoutManager);
-
-                            reviewsAdapter = new ReviewsAdapter(reviews);
-                            reviewsRecyclerView.setAdapter(reviewsAdapter);
-
-                        }
-                        else {
-                            reviewsMsgTextView.setText(R.string.no_reviews_msg);
-                            reviewsMsgTextView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                    else {
-                        Log.d(TAG, "reviews array equals null");
-
-                        reviewsMsgTextView.setText(R.string.error_loading_reviews_msg);
-                        reviewsMsgTextView.setVisibility(View.VISIBLE);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, e.toString());
-
-                    reviewsMsgTextView.setText(R.string.error_loading_reviews_msg);
-                    reviewsMsgTextView.setVisibility(View.VISIBLE);
-                }
-
-                loadingReviewsProgressBar.setVisibility(View.INVISIBLE);
-            }
-        }
-        , new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, error.toString());
-
-                reviewsMsgTextView.setText(R.string.error_loading_reviews_msg);
-                reviewsMsgTextView.setVisibility(View.VISIBLE);
-
-                loadingReviewsProgressBar.setVisibility(View.INVISIBLE);
-            }
-        });
-
     }
 
     private void displayLoadError(VolleyError error) {
@@ -333,19 +195,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @OnClick(R.id.btn_retry_load)
     void retryLoadMovieDetails() {
         loadMovieDetails();
-        loadMovieVideos();
-        loadMovieReviews();
-    }
 
-    public void openWebPage(String url) {
-        Uri webpage = Uri.parse(url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
-        else {
-            Toast.makeText(this, R.string.error_open_url, Toast.LENGTH_SHORT).show();
-        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        MovieVideosFragment movieVideosFragment =
+                (MovieVideosFragment) fragmentManager.findFragmentById(R.id.movie_videos_fragment_container);
+        MovieReviewsFragment movieReviewsFragment =
+                (MovieReviewsFragment) fragmentManager.findFragmentById(R.id.movie_reviews_fragment_container);
+        movieVideosFragment.loadMovieVideos();
+        movieReviewsFragment.loadMovieReviews();
     }
 
 }

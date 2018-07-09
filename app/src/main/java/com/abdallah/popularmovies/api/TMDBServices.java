@@ -33,7 +33,7 @@ public final class TMDBServices {
     public static final int SORT_MOVIES_BY_POPULARITY = 1;
     public static final int SORT_MOVIES_BY_RATING = 2;
 
-    public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185";
+    public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185/%s";
     public static final String YOUTUBE_VIDEO_THUMBNAIL_URL = "http://img.youtube.com/vi/%s/default.jpg";
 
     private TMDBServices() {/* prevent instantiation */};
