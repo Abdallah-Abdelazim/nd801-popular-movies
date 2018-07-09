@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -118,6 +119,11 @@ public class MovieVideosFragment extends Fragment {
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(
                                             MovieVideosFragment.this.getContext());
                                     videosRecyclerView.setLayoutManager(layoutManager);
+
+                                    DividerItemDecoration dividerItemDecoration =
+                                            new DividerItemDecoration(MovieVideosFragment.this.getContext(),
+                                                    layoutManager.getOrientation());
+                                    videosRecyclerView.addItemDecoration(dividerItemDecoration);
 
                                     videosAdapter = new VideosAdapter(videos
                                             , new VideosAdapter.ListItemClickListener() {

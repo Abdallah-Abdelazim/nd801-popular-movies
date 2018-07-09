@@ -4,6 +4,7 @@ package com.abdallah.popularmovies.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -118,6 +119,11 @@ public class MovieReviewsFragment extends Fragment {
                                     LinearLayoutManager layoutManager = new LinearLayoutManager(
                                             MovieReviewsFragment.this.getContext());
                                     reviewsRecyclerView.setLayoutManager(layoutManager);
+
+                                    DividerItemDecoration dividerItemDecoration =
+                                            new DividerItemDecoration(MovieReviewsFragment.this.getContext(),
+                                            layoutManager.getOrientation());
+                                    reviewsRecyclerView.addItemDecoration(dividerItemDecoration);
 
                                     reviewsAdapter = new ReviewsAdapter(reviews);
                                     reviewsRecyclerView.setAdapter(reviewsAdapter);
