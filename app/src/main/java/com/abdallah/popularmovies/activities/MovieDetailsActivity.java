@@ -115,7 +115,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         loadErrorLinearLayout.setVisibility(View.INVISIBLE);
         loadingMovieDetailsProgressBar.setVisibility(View.VISIBLE);
 
-        TMDBServices.requestMovieDetails(movieId, this
+        TMDBServices.requestMovieDetails(this, movieId
                 , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -168,7 +168,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         loadingVideosProgressBar.setVisibility(View.VISIBLE);
         videosMsgTextView.setVisibility(View.INVISIBLE);
 
-        TMDBServices.requestMovieVideos(movieId, this
+        TMDBServices.requestMovieVideos(this, movieId
                 , new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -245,7 +245,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         loadingReviewsProgressBar.setVisibility(View.VISIBLE);
         reviewsMsgTextView.setVisibility(View.INVISIBLE);
 
-        TMDBServices.requestMovieReviews(movieId, this
+        TMDBServices.requestMovieReviews(this, movieId
                 , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

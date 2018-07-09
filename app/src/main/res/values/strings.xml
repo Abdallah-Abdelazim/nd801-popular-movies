@@ -6,6 +6,7 @@
 
     <!-- Content Descriptions -->
     <string name="movie_poster_imageview_content_description">Movie Poster Image</string>
+    <string name="movie_thumbnail_imageview_content_description">Movie Thumbnail Image</string>
 
     <!-- Menu -->
     <string name="action_sort_by_popularity">Sort by popularity</string>

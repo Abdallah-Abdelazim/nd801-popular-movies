@@ -34,10 +34,11 @@ public final class TMDBServices {
     public static final int SORT_MOVIES_BY_RATING = 2;
 
     public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185";
+    public static final String YOUTUBE_VIDEO_THUMBNAIL_URL = "http://img.youtube.com/vi/%s/default.jpg";
 
     private TMDBServices() {/* prevent instantiation */};
 
-    public static void requestMovies(int moviesSortingMethod, int page, Context ctx
+    public static void requestMovies(Context ctx, int moviesSortingMethod, int page
             , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {
 
         String path;
@@ -67,7 +68,7 @@ public final class TMDBServices {
         RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
     }
 
-    public static void requestMovieDetails(long movieId, Context ctx
+    public static void requestMovieDetails(Context ctx, long movieId
             , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {
         String url = Uri.parse(BASE_URL).buildUpon()
                 .appendEncodedPath(MOVIE_DETAILS_PATH)
@@ -82,7 +83,7 @@ public final class TMDBServices {
         RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
     }
 
-    public static void requestMovieVideos(long movieId, Context ctx
+    public static void requestMovieVideos(Context ctx, long movieId
             , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {
         String url = Uri.parse(BASE_URL).buildUpon()
                 .appendEncodedPath(MOVIE_DETAILS_PATH)
@@ -98,7 +99,7 @@ public final class TMDBServices {
         RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
     }
 
-    public static void requestMovieReviews(long movieId, Context ctx
+    public static void requestMovieReviews(Context ctx, long movieId
             , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {
         String url = Uri.parse(BASE_URL).buildUpon()
                 .appendEncodedPath(MOVIE_DETAILS_PATH)

@@ -5,10 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.abdallah.popularmovies.R;
+import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Video;
+import com.squareup.picasso.Picasso;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder>{
 
@@ -35,7 +41,10 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Video vid = videos[position];
-        holder.videoNameTextView.setText(vid.getName());
+        Picasso.get()
+                .load(String.format(TMDBServices.YOUTUBE_VIDEO_THUMBNAIL_URL, vid.getKey()))
+                .into(holder.thumbnailImageView);
+        holder.titleTextView.setText(vid.getName());
     }
 
     @Override
@@ -45,12 +54,12 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView videoNameTextView;
+        @BindView(R.id.iv_thumbnail) ImageView thumbnailImageView;
+        @BindView(R.id.tv_title) TextView titleTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            videoNameTextView = itemView.findViewById(R.id.tv_video_name);
+            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(this);
         }

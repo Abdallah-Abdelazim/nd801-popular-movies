@@ -119,7 +119,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
             errorSnackbar.dismiss();
         }
 
-        TMDBServices.requestMovies(moviesSortingMethod, currentPage, this
+        TMDBServices.requestMovies(this, moviesSortingMethod, currentPage
                 , new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
