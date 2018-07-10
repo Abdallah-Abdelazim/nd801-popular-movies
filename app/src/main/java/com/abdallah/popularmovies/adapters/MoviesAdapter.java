@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.abdallah.popularmovies.R;
-import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
@@ -22,11 +24,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     private List<Movie> movies;
 
-    private RecyclerViewItemClickListener onClickListener;
+    private RecyclerViewItemClickListener itemClickListener;
 
-    public MoviesAdapter(List<Movie> movies, RecyclerViewItemClickListener onClickListener) {
+    public MoviesAdapter(List<Movie> movies, RecyclerViewItemClickListener itemClickListener) {
         this.movies = movies;
-        this.onClickListener = onClickListener;
+        this.itemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -57,18 +59,19 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public ImageView moviePosterImageView;
+        @BindView(R.id.iv_movie_poster) public ImageView moviePosterImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            moviePosterImageView = itemView.findViewById(R.id.iv_movie_poster);
+            ButterKnife.bind(this, itemView);
+
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             int clickedItemIndex = getAdapterPosition();
-            onClickListener.onRecyclerViewItemClicked(clickedItemIndex);
+            itemClickListener.onRecyclerViewItemClicked(clickedItemIndex);
         }
     }
 

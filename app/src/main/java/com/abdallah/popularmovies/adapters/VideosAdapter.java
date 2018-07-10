@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.abdallah.popularmovies.R;
-import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Video;
 import com.squareup.picasso.Picasso;
 
@@ -21,9 +20,9 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
     private final static String TAG = VideosAdapter.class.getSimpleName();
 
     private Video [] videos;
-    private ListItemClickListener itemClickListener;
+    private RecyclerViewItemClickListener itemClickListener;
 
-    public VideosAdapter(Video[] videos, ListItemClickListener itemClickListener) {
+    public VideosAdapter(Video[] videos, RecyclerViewItemClickListener itemClickListener) {
         this.videos = videos;
         this.itemClickListener = itemClickListener;
     }
@@ -71,14 +70,14 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         public void onClick(View v) {
             int clickedItemIndex = getAdapterPosition();
             Video video = videos[clickedItemIndex];
-            itemClickListener.onListItemClicked(video);
+            itemClickListener.onRecyclerViewItemClicked(video);
         }
     }
 
     /**
      * Used in handling items clicks
      */
-    public interface ListItemClickListener {
-        void onListItemClicked(Video video);
+    public interface RecyclerViewItemClickListener {
+        void onRecyclerViewItemClicked(Video video);
     }
 }

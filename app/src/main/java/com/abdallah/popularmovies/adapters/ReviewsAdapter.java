@@ -10,6 +10,9 @@ import android.widget.TextView;
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.models.Review;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHolder> {
 
     private final static String TAG = ReviewsAdapter.class.getSimpleName();
@@ -45,14 +48,12 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView reviewContentTextView;
-        public TextView reviewAuthorTextView;
+        @BindView(R.id.tv_review_content) public TextView reviewContentTextView;
+        @BindView(R.id.tv_review_author) public TextView reviewAuthorTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            reviewContentTextView = itemView.findViewById(R.id.tv_review_content);
-            reviewAuthorTextView = itemView.findViewById(R.id.tv_review_author);
+            ButterKnife.bind(this, itemView);
         }
     }
 }
