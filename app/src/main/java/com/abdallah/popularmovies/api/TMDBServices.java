@@ -3,7 +3,6 @@ package com.abdallah.popularmovies.api;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.abdallah.popularmovies.BuildConfig;
 import com.abdallah.popularmovies.utils.network.RequestQueueSingleton;

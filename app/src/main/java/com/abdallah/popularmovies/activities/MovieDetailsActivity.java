@@ -1,14 +1,11 @@
 package com.abdallah.popularmovies.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,17 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
-import com.abdallah.popularmovies.adapters.ReviewsAdapter;
-import com.abdallah.popularmovies.adapters.VideosAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.fragments.MovieReviewsFragment;
 import com.abdallah.popularmovies.fragments.MovieVideosFragment;
 import com.abdallah.popularmovies.models.Movie;
-import com.abdallah.popularmovies.models.Review;
-import com.abdallah.popularmovies.models.Video;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
@@ -35,7 +27,6 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;

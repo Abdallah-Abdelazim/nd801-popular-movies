@@ -15,7 +15,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.abdallah.popularmovies.R;
-import com.abdallah.popularmovies.activities.MovieDetailsActivity;
 import com.abdallah.popularmovies.adapters.ReviewsAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Review;
