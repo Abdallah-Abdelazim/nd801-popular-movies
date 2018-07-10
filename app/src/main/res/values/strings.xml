@@ -3,15 +3,23 @@
 
     <!-- activities titles -->
     <string name="title_activity_movie_details">Movie Details</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_browse_movies_fragment">Browse Movies</string>
+    <string name="title_favorite_movies_fragment">Favorite Movies</string>
+    <!---->
 
     <!-- Content Descriptions -->
     <string name="movie_poster_imageview_content_description">Movie Poster Image</string>
     <string name="movie_thumbnail_imageview_content_description">Movie Thumbnail Image</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!---->
 
     <!-- Menu -->
     <string name="action_sort_by_popularity">Sort by popularity</string>
     <string name="action_sort_by_rating">Sort by rating</string>
     <string name="action_sort_by">Sort movies by</string>
+    <!---->
 
     <!-- Messages -->
     <string name="no_connection_error_message">No Internet Connection!</string>
@@ -24,6 +32,7 @@
     <string name="no_reviews_msg">There\'re no reviews to display!</string>
     <string name="error_loading_reviews_msg">Couldn\'t load reviews!</string>
     <string name="error_open_url">Couldn\'t open the URL on your device!</string>
+    <!---->
 
     <!-- Views text -->
     <string name="retry_loading_text">Retry</string>
@@ -35,6 +44,12 @@
     <string name="videos_label">Videos</string>
     <string name="reviews_label">Reviews</string>
     <string name="author_label">Written by:</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_browse_movies_title">Browse Movies</string>
+    <string name="nav_favorite_movies_title">Favorite Movies</string>
+    <!---->
 
     <!-- Misc -->
     <string name="youtube_video_base_url" translatable="false">https://www.youtube.com/watch?v=%s</string>
@@ -42,5 +57,6 @@
     <string name="tmdb_img_url" translatable="false">"http://image.tmdb.org/t/p/w185%s"</string>
     <string name="show_more_text">"  Show more"</string>
     <string name="show_less_text">"  Show less"</string>
+    <!---->
 
 </resources>

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
+import com.abdallah.popularmovies.fragments.BrowseMoviesFragment;
 import com.abdallah.popularmovies.fragments.MovieReviewsFragment;
 import com.abdallah.popularmovies.fragments.MovieVideosFragment;
 import com.abdallah.popularmovies.models.Movie;
@@ -39,6 +40,8 @@ import butterknife.OnClick;
 public class MovieDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
+
+    public static final String EXTRA_MOVIE_ID = "MovieID";
 
     @BindView(R.id.tv_title) TextView titleTextView;
     @BindView(R.id.iv_movie_poster) ImageView moviePosterImageView;
@@ -68,7 +71,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        movieId = intent.getLongExtra(MoviesActivity.EXTRA_MOVIE_ID, -1);
+        movieId = intent.getLongExtra(EXTRA_MOVIE_ID, -1);
 
         if (movieId != -1) {
             loadMovieDetails();

@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.abdallah.popularmovies.activities.MoviesActivity"
-    tools:showIn="@layout/activity_movies">
+    tools:context="com.abdallah.popularmovies.fragments.BrowseMoviesFragment" >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_movies"

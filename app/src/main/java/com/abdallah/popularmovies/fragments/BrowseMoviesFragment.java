@@ -1,21 +1,26 @@
-package com.abdallah.popularmovies.activities;
+package com.abdallah.popularmovies.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
+import com.abdallah.popularmovies.activities.MovieDetailsActivity;
 import com.abdallah.popularmovies.adapters.EndlessRecyclerOnScrollListener;
 import com.abdallah.popularmovies.adapters.MoviesAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
@@ -37,11 +42,9 @@ import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.RecyclerViewItemClickListener {
+public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.RecyclerViewItemClickListener {
 
-    private static final String TAG = MoviesActivity.class.getSimpleName();
-
-    public static final String EXTRA_MOVIE_ID = "MovieID";
+    private static final String TAG = BrowseMoviesFragment.class.getSimpleName();
 
     @BindView(R.id.rv_movies) RecyclerView moviesRecyclerView;
     @BindView(R.id.loading_movies_pb) ProgressBar loadingMoviesProgressBar;
@@ -63,13 +66,36 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
     private Snackbar errorSnackbar;
 
+    public BrowseMoviesFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment.
+     *
+     * @return A new instance of fragment BrowseMoviesFragment.
+     */
+    public static BrowseMoviesFragment newInstance() {
+        BrowseMoviesFragment fragment = new BrowseMoviesFragment();
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movies);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
+        setHasOptionsMenu(true);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater
+            , @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        View fragmentView = inflater.inflate(R.layout.fragment_browse_movies
+                , container, false);
+        ButterKnife.bind(this, fragmentView);
 
         if (savedInstanceState != null) {
             moviesSortingMethod = savedInstanceState.getInt(STATE_SORTING_METHOD);
@@ -77,13 +103,20 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
             Log.d(TAG, "restored sorting method = " + moviesSortingMethod);
         }
 
+        return fragmentView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
         recyclerViewVisibleThreshold = 5*gridSpanCount; // always 5 rows of visible threshold
 
         configureMoviesRecyclerView();
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(STATE_SORTING_METHOD, moviesSortingMethod);
 
         super.onSaveInstanceState(outState);
@@ -94,7 +127,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
         // in content do not change the layout size of the RecyclerView
         moviesRecyclerView.setHasFixedSize(true);
 
-        layoutManager = new GridLayoutManager(this, gridSpanCount);
+        layoutManager = new GridLayoutManager(getContext(), gridSpanCount);
         moviesRecyclerView.setLayoutManager(layoutManager);
 
         moviesList = new ArrayList<>();
@@ -121,7 +154,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
             errorSnackbar.dismiss();
         }
 
-        TMDBServices.requestMovies(this, moviesSortingMethod, currentPage
+        TMDBServices.requestMovies(getContext(), moviesSortingMethod, currentPage
                 , new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -137,7 +170,8 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(MoviesActivity.this, getString(R.string.load_movies_error_msg)
+                            Toast.makeText(BrowseMoviesFragment.this.getContext()
+                                    , getString(R.string.load_movies_error_msg)
                                     , Toast.LENGTH_SHORT).show();
                         }
 
@@ -168,7 +202,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
         loadingMoviesProgressBar.setVisibility(View.INVISIBLE);
 
-        errorSnackbar = Snackbar.make(findViewById(R.id.coordinator_layout)
+        errorSnackbar = Snackbar.make(getActivity().findViewById(android.R.id.content)
                 , errorMsg, Snackbar.LENGTH_INDEFINITE);
         errorSnackbar.setAction(R.string.retry_loading_text, new View.OnClickListener() {
             @Override
@@ -201,9 +235,9 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_movies, menu);
+        inflater.inflate(R.menu.fragment_browse_movies, menu);
 
         // check the menu item corresponding to the sorting method
         if (moviesSortingMethod == TMDBServices.SORT_MOVIES_BY_POPULARITY) {
@@ -213,14 +247,11 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
             menu.findItem(R.id.action_sort_by_rating).setChecked(true);
         }
 
-        return true;
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify sortByPopularityMenuItem parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         switch (id) {
@@ -250,11 +281,11 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
     @Override
     public void onRecyclerViewItemClicked(int clickedItemIndex) {
-        Intent intent = new Intent(this, MovieDetailsActivity.class);
+        Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
 
         Movie movie = moviesList.get(clickedItemIndex);
         long movieId = movie.getId();
-        intent.putExtra(EXTRA_MOVIE_ID, movieId);
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
 
         startActivity(intent);
     }
