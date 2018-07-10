@@ -125,9 +125,9 @@ public class MovieVideosFragment extends Fragment {
                                     videosRecyclerView.addItemDecoration(dividerItemDecoration);
 
                                     videosAdapter = new VideosAdapter(videos
-                                            , new VideosAdapter.ListItemClickListener() {
+                                            , new VideosAdapter.RecyclerViewItemClickListener() {
                                         @Override
-                                        public void onListItemClicked(Video video) {
+                                        public void onRecyclerViewItemClicked(Video video) {
                                             String videoLink =
                                                     getString(R.string.youtube_video_base_url, video.getKey());
                                             openVideoExternally(videoLink);

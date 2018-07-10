@@ -37,9 +37,9 @@
     <string name="author_label">Written by:</string>
 
     <!-- Misc -->
-    <string name="youtube_video_base_url" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
+    <string name="youtube_video_base_url" translatable="false">https://www.youtube.com/watch?v=%s</string>
     <string name="youtube_video_thumbnail_url" translatable="false">http://img.youtube.com/vi/%s/default.jpg</string>
-    <string name="tmdb_img_url" translatable="false">"http://image.tmdb.org/t/p/w185/%s"</string>
+    <string name="tmdb_img_url" translatable="false">"http://image.tmdb.org/t/p/w185%s"</string>
     <string name="show_more_text">"  Show more"</string>
     <string name="show_less_text">"  Show less"</string>
 
