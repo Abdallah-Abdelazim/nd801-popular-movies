@@ -58,7 +58,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     private List<Movie> moviesList;
 
     private int moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
-    private int currentPage = 1;
+    private int currentPage;
 
     private static final String STATE_SORTING_METHOD = "sorting_method";
 
@@ -110,6 +110,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        currentPage = 1;
         recyclerViewVisibleThreshold = 5*gridSpanCount; // always 5 rows of visible threshold
 
         configureMoviesRecyclerView();
@@ -217,7 +218,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
         }
     }
 
-    private void resetMoviesRecyclerViewAfterChangingSorting() {
+    public void resetMoviesRecyclerView() {
         currentPage = 1;
         moviesList.clear();
         adapter.notifyDataSetChanged();
@@ -260,7 +261,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
                 moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY;
 
-                resetMoviesRecyclerViewAfterChangingSorting();
+                resetMoviesRecyclerView();
 
                 return true;
 
@@ -269,7 +270,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
                 moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_RATING;
 
-                resetMoviesRecyclerViewAfterChangingSorting();
+                resetMoviesRecyclerView();
 
                 return true;
 

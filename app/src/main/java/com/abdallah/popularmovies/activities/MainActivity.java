@@ -17,6 +17,9 @@ import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.fragments.BrowseMoviesFragment;
 import com.abdallah.popularmovies.fragments.FavoriteMoviesFragment;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
         , FragmentManager.OnBackStackChangedListener {
@@ -25,20 +28,22 @@ public class MainActivity extends AppCompatActivity
 
     private static final String STATE_ACTIVITY_TITLE = "STATE_ACTIVITY_TITLE";
 
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.nav_view) NavigationView navigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
@@ -63,7 +68,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -93,7 +97,6 @@ public class MainActivity extends AppCompatActivity
                     .commit();
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -103,9 +106,11 @@ public class MainActivity extends AppCompatActivity
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (currentFragment instanceof BrowseMoviesFragment) {
             setTitle(R.string.title_browse_movies_fragment);
+            navigationView.getMenu().findItem(R.id.nav_browse_movies).setChecked(true);
         }
         else if (currentFragment instanceof FavoriteMoviesFragment) {
             setTitle(R.string.title_favorite_movies_fragment);
+            navigationView.getMenu().findItem(R.id.nav_fav_movies).setChecked(true);
         }
         else {
             Log.d(TAG, "Unrecognized current fragment!");
