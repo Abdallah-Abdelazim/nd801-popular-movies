@@ -33,8 +33,6 @@ public final class TMDBServices {
     public static final int SORT_MOVIES_BY_POPULARITY = 1;
     public static final int SORT_MOVIES_BY_RATING = 2;
 
-    public static final String IMG_BASE_URL = "http://image.tmdb.org/t/p/w185/%s";
-    public static final String YOUTUBE_VIDEO_THUMBNAIL_URL = "http://img.youtube.com/vi/%s/default.jpg";
 
     private TMDBServices() {/* prevent instantiation */};
 
@@ -50,8 +48,7 @@ public final class TMDBServices {
                 path = HIGHEST_RATED_MOVIES_PATH;
                 break;
             default:
-                Log.d(TAG, "requestMovies(): Undefined sorting method");
-                return;
+                throw new IllegalArgumentException("Undefined sorting method");
         }
 
         String url = Uri.parse(BASE_URL)

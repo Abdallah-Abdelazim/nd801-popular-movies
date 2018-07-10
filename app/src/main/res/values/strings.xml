@@ -13,7 +13,7 @@
     <string name="action_sort_by_rating">Sort by rating</string>
     <string name="action_sort_by">Sort movies by</string>
 
-    <!-- Error Messages -->
+    <!-- Messages -->
     <string name="no_connection_error_message">No Internet Connection!</string>
     <string name="connection_timeout_error_message">Connection Timed Out!</string>
     <string name="load_movies_error_msg">Error occurred while trying to load movies!</string>
@@ -37,7 +37,9 @@
     <string name="author_label">Written by:</string>
 
     <!-- Misc -->
-    <string name="youtube_video_base_link" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
+    <string name="youtube_video_base_url" translatable="false">https://www.youtube.com/watch?v=%1$s</string>
+    <string name="youtube_video_thumbnail_url" translatable="false">http://img.youtube.com/vi/%s/default.jpg</string>
+    <string name="tmdb_img_url" translatable="false">"http://image.tmdb.org/t/p/w185/%s"</string>
     <string name="show_more_text">"  Show more"</string>
     <string name="show_less_text">"  Show less"</string>
 

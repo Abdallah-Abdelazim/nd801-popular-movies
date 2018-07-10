@@ -132,7 +132,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 if (movie != null) {
                     titleTextView.setText(movie.getTitle());
 
-                    String posterUrl = String.format(TMDBServices.IMG_BASE_URL, movie.getPosterPath());
+                    String posterUrl = getString(R.string.tmdb_img_url, movie.getPosterPath());
                     Picasso.get()
                             .load(posterUrl)
                             .into(moviePosterImageView);

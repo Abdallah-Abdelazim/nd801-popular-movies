@@ -41,8 +41,11 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Video vid = videos[position];
+
+        String thumbnailUrl = holder.itemView.getResources()
+                .getString(R.string.youtube_video_thumbnail_url, vid.getKey());
         Picasso.get()
-                .load(String.format(TMDBServices.YOUTUBE_VIDEO_THUMBNAIL_URL, vid.getKey()))
+                .load(thumbnailUrl)
                 .into(holder.thumbnailImageView);
         holder.titleTextView.setText(vid.getName());
     }

@@ -59,7 +59,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
     private static final String STATE_SORTING_METHOD = "sorting_method";
 
-    private int recyclerViewVisibleThreshold = 10;
+    private int recyclerViewVisibleThreshold;
 
     private Snackbar errorSnackbar;
 
@@ -76,6 +76,8 @@ public class MoviesActivity extends AppCompatActivity implements MoviesAdapter.R
 
             Log.d(TAG, "restored sorting method = " + moviesSortingMethod);
         }
+
+        recyclerViewVisibleThreshold = 5*gridSpanCount; // always 5 rows of visible threshold
 
         configureMoviesRecyclerView();
     }

@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
-import com.abdallah.popularmovies.activities.MovieDetailsActivity;
 import com.abdallah.popularmovies.adapters.VideosAdapter;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.models.Video;
@@ -130,7 +129,7 @@ public class MovieVideosFragment extends Fragment {
                                         @Override
                                         public void onListItemClicked(Video video) {
                                             String videoLink =
-                                                    getString(R.string.youtube_video_base_link, video.getKey());
+                                                    getString(R.string.youtube_video_base_url, video.getKey());
                                             openVideoExternally(videoLink);
                                         }
                                     });
