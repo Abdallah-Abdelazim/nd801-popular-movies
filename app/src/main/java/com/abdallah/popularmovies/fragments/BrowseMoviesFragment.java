@@ -46,6 +46,8 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
     private static final String TAG = BrowseMoviesFragment.class.getSimpleName();
 
+    private static final String STATE_SORTING_METHOD = "sorting_method";
+
     @BindView(R.id.rv_movies) RecyclerView moviesRecyclerView;
     @BindView(R.id.loading_movies_pb) ProgressBar loadingMoviesProgressBar;
     @BindView(R.id.ll_empty_list) LinearLayout emptyMoviesListLinearLayout;
@@ -59,8 +61,6 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
     private int moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
     private int currentPage;
-
-    private static final String STATE_SORTING_METHOD = "sorting_method";
 
     private int recyclerViewVisibleThreshold;
 
