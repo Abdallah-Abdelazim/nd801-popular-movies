@@ -12,6 +12,9 @@ import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.models.Video;
 import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -19,11 +22,16 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     private final static String TAG = VideosAdapter.class.getSimpleName();
 
-    private Video [] videos;
+    private List<Video> videos;
     private RecyclerViewItemClickListener itemClickListener;
 
-    public VideosAdapter(Video[] videos, RecyclerViewItemClickListener itemClickListener) {
+    public VideosAdapter(List<Video> videos, RecyclerViewItemClickListener itemClickListener) {
         this.videos = videos;
+        this.itemClickListener = itemClickListener;
+    }
+
+    public VideosAdapter(Video[] videos, RecyclerViewItemClickListener itemClickListener) {
+        this.videos = Arrays.asList(videos);
         this.itemClickListener = itemClickListener;
     }
 
@@ -39,7 +47,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Video vid = videos[position];
+        Video vid = videos.get(position);
 
         String thumbnailUrl = holder.itemView.getResources()
                 .getString(R.string.youtube_video_thumbnail_url, vid.getKey());
@@ -51,7 +59,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return videos.length;
+        return videos.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -69,7 +77,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         @Override
         public void onClick(View v) {
             int clickedItemIndex = getAdapterPosition();
-            Video video = videos[clickedItemIndex];
+            Video video = videos.get(clickedItemIndex);
             itemClickListener.onRecyclerViewItemClicked(video);
         }
     }

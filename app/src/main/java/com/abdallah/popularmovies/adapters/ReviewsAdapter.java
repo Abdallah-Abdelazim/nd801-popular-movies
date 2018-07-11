@@ -10,6 +10,9 @@ import android.widget.TextView;
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.models.Review;
 
+import java.util.Arrays;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -17,10 +20,14 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
 
     private final static String TAG = ReviewsAdapter.class.getSimpleName();
 
-    private Review [] reviews;
+    private List<Review> reviews;
+
+    public ReviewsAdapter(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 
     public ReviewsAdapter(Review[] reviews) {
-        this.reviews = reviews;
+        this.reviews = Arrays.asList(reviews);
     }
 
     @NonNull
@@ -35,7 +42,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Review rev = reviews[position];
+        Review rev = reviews.get(position);
 
         holder.reviewContentTextView.setText(rev.getContent());
         holder.reviewAuthorTextView.setText(rev.getAuthor());
@@ -43,7 +50,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return reviews.length;
+        return reviews.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
