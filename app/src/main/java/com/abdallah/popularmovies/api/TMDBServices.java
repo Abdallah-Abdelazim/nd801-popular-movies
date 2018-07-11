@@ -60,7 +60,7 @@ public final class TMDBServices {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null
                 , onSuccess, onError);
-
+        request.setTag(ctx);
         RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
     }
 
@@ -75,7 +75,7 @@ public final class TMDBServices {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null
                 , onSuccess, onError);
-
+        request.setTag(ctx);
         RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
     }
 
@@ -91,7 +91,7 @@ public final class TMDBServices {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null
                 , onSuccess, onError);
-
+        request.setTag(ctx);
         RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
     }
 
@@ -107,8 +107,16 @@ public final class TMDBServices {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null
                 , onSuccess, onError);
-
+        request.setTag(ctx);
         RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
+    }
+
+    /**
+     * Cancels all requests associated with the passed context.
+     * @param ctx
+     */
+    public static void cancelOngoingRequests(Context ctx) {
+        RequestQueueSingleton.getInstance(ctx).getRequestQueue().cancelAll(ctx);
     }
 
 }

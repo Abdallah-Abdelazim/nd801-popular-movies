@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.abdallah.popularmovies.R;
+import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.fragments.BrowseMoviesFragment;
 import com.abdallah.popularmovies.fragments.FavoriteMoviesFragment;
 
@@ -115,5 +116,13 @@ public class MainActivity extends AppCompatActivity
         else {
             Log.d(TAG, "Unrecognized current fragment!");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // cancels ongoing requests (if any) that if continued will cause the app to crash when finished.
+        TMDBServices.cancelOngoingRequests(this);
+        Log.d(TAG, "Requests has been canceled!");
+        super.onDestroy();
     }
 }
