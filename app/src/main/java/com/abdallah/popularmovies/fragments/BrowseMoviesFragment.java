@@ -61,6 +61,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
     private int moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
     private int currentPage;
+    private int totalPagesNum;
 
     private int recyclerViewVisibleThreshold;
     private EndlessRecyclerOnScrollListener endlessOnScrollListener;
@@ -113,7 +114,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        currentPage = 1;
+        currentPage = totalPagesNum = 1;
         loadMovies();
     }
 
@@ -140,8 +141,14 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
         endlessOnScrollListener = new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
             @Override
             public void onLoadMore() {
-                currentPage++;
-                loadMovies();
+                if (currentPage < totalPagesNum) {
+                    currentPage++;
+                    loadMovies();
+                }
+                else {
+                    Toast.makeText(BrowseMoviesFragment.this.getContext()
+                            , R.string.endless_scrolling_end_msg, Toast.LENGTH_SHORT).show();
+                }
             }
         };
         moviesRecyclerView.addOnScrollListener(endlessOnScrollListener);
@@ -160,9 +167,12 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
                     @Override
                     public void onResponse(JSONObject response) {
 
-                        // serialize the json response to Movies array
-                        Gson gson = new Gson();
                         try {
+                            totalPagesNum = response.getInt("total_pages");
+                            Log.d(TAG, "totalPagesNum = " + totalPagesNum);
+
+                            // serialize the json response to Movies array
+                            Gson gson = new Gson();
                             Movie [] moviesArray = gson.fromJson(response.getJSONArray("results").toString()
                                     , Movie[].class);
                             List<Movie> movies = Arrays.asList(moviesArray);
