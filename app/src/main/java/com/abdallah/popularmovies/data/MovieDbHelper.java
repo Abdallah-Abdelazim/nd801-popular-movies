@@ -10,29 +10,36 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "Movie.db";
 
+
     public MovieDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sqlCreateFavoriteMoviesTable =
-                "CREATE TABLE " + MovieDbContract.FavoriteMovies.TABLE_NAME + " (" +
-                MovieDbContract.FavoriteMovies._ID + " INTEGER PRIMARY KEY," +
-                MovieDbContract.FavoriteMovies.COLUMN_NAME_MOVIE_ID + " INTEGER)";
-        db.execSQL(sqlCreateFavoriteMoviesTable);
+        final String SQL_CREATE_TABLE_FAVORITE_MOVIE =
+                "CREATE TABLE " + MovieDbContract.FavoriteMovie.TABLE_NAME + " (" +
+                        MovieDbContract.FavoriteMovie._ID + " INTEGER PRIMARY KEY," +
+                        MovieDbContract.FavoriteMovie.COLUMN_NAME_TMDB_MOVIE_ID + " INTEGER NOT NULL)";
+
+        db.execSQL(SQL_CREATE_TABLE_FAVORITE_MOVIE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sqlDeleteFavoriteMoviesTable =
-                "DROP TABLE IF EXISTS " + MovieDbContract.FavoriteMovies.TABLE_NAME;
-        db.execSQL(sqlDeleteFavoriteMoviesTable);
+        // Since these are development releases I don't care about the data.
+        // Drop the database tables and recreate them.
+        final String SQL_DELETE_TABLE_FAVORITE_MOVIE =
+                "DROP TABLE IF EXISTS " + MovieDbContract.FavoriteMovie.TABLE_NAME;
+
+        db.execSQL(SQL_DELETE_TABLE_FAVORITE_MOVIE);
         onCreate(db);
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Since these are development release I don't care about the data.
+        // Drop the database tables and recreate them. Same as onUpgrade
         onUpgrade(db, oldVersion, newVersion);
     }
 }
