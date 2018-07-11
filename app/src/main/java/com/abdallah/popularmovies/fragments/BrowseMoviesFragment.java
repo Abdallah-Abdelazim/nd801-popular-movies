@@ -63,6 +63,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     private int currentPage;
 
     private int recyclerViewVisibleThreshold;
+    private EndlessRecyclerOnScrollListener endlessOnScrollListener;
 
     private Snackbar errorSnackbar;
 
@@ -103,6 +104,8 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
             Log.d(TAG, "restored sorting method = " + moviesSortingMethod);
         }
 
+        configureMoviesRecyclerView();
+
         return fragmentView;
     }
 
@@ -111,9 +114,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
         super.onActivityCreated(savedInstanceState);
 
         currentPage = 1;
-        recyclerViewVisibleThreshold = 5*gridSpanCount; // always 5 rows of visible threshold
-
-        configureMoviesRecyclerView();
+        loadMovies();
     }
 
     @Override
@@ -135,16 +136,15 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
         adapter = new MoviesAdapter(moviesList, this);
         moviesRecyclerView.setAdapter(adapter);
 
-        loadMovies();
-
-        moviesRecyclerView.addOnScrollListener(
-                new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
+        recyclerViewVisibleThreshold = 5*gridSpanCount; // always 5 rows of visible threshold
+        endlessOnScrollListener = new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
             @Override
             public void onLoadMore() {
                 currentPage++;
                 loadMovies();
             }
-        });
+        };
+        moviesRecyclerView.addOnScrollListener(endlessOnScrollListener);
     }
 
     private void loadMovies() {
@@ -219,20 +219,12 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     }
 
     public void resetMoviesRecyclerView() {
-        currentPage = 1;
+        endlessOnScrollListener.reset();
+
         moviesList.clear();
         adapter.notifyDataSetChanged();
+        currentPage = 1;
         loadMovies();
-
-        moviesRecyclerView.clearOnScrollListeners();
-        moviesRecyclerView.addOnScrollListener(
-                new EndlessRecyclerOnScrollListener(recyclerViewVisibleThreshold) {
-            @Override
-            public void onLoadMore() {
-                currentPage++;
-                loadMovies();
-            }
-        });
     }
 
     @Override
@@ -284,12 +276,10 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     public void onRecyclerViewItemClicked(int clickedItemIndex) {
         Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
 
-        Movie movie = moviesList.get(clickedItemIndex);
-        long movieId = movie.getId();
+        long movieId = moviesList.get(clickedItemIndex).getId();
         intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
 
         startActivity(intent);
     }
-
 
 }
