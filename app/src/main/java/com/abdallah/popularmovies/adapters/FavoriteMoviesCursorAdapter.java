@@ -1,7 +1,7 @@
 package com.abdallah.popularmovies.adapters;
 
-
 import android.content.Context;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,27 +10,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.abdallah.popularmovies.R;
-import com.abdallah.popularmovies.models.Movie;
+import com.abdallah.popularmovies.data.MovieDbContract;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+public class FavoriteMoviesCursorAdapter extends RecyclerView.Adapter<FavoriteMoviesCursorAdapter.ViewHolder> {
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
+    private static final String TAG = FavoriteMoviesCursorAdapter.class.getSimpleName();
 
-    private static final String TAG = MoviesAdapter.class.getSimpleName();
-
-    private Context ctx;
-    private List<Movie> movies;
+    Context ctx;
+    private Cursor cursor;
     private RecyclerViewItemClickListener itemClickListener;
 
-    public MoviesAdapter(Context ctx, List<Movie> movies
+    public FavoriteMoviesCursorAdapter(Context ctx
             , RecyclerViewItemClickListener itemClickListener) {
         this.ctx = ctx;
-        this.movies = movies;
         this.itemClickListener = itemClickListener;
     }
 
@@ -46,9 +42,21 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Movie movie = movies.get(position);
 
-        String posterUrl = ctx.getString(R.string.tmdb_img_url, movie.getPosterPath());
+        int idColIndex = cursor.getColumnIndex(MovieDbContract.FavoriteMovie._ID);
+        int tmdbIdColIndex = cursor.getColumnIndex(MovieDbContract.FavoriteMovie.COLUMN_NAME_TMDB_ID);
+        int titleColIndex = cursor.getColumnIndex(MovieDbContract.FavoriteMovie.COLUMN_NAME_TITLE);
+        int posterPathColIndex = cursor.getColumnIndex(MovieDbContract.FavoriteMovie.COLUMN_NAME_POSTER_PATH);
+
+        cursor.moveToPosition(position); // get to the right location in the cursor
+
+        long id = cursor.getLong(idColIndex);
+        long tmdbId = cursor.getLong(tmdbIdColIndex);
+        String title = cursor.getString(titleColIndex);
+        String posterPath = cursor.getString(posterPathColIndex);
+
+        holder.itemView.setTag(tmdbId);
+        String posterUrl = ctx.getString(R.string.tmdb_img_url, posterPath);
         Picasso.get()
                 .load(posterUrl)
                 .into(holder.moviePosterImageView);
@@ -56,7 +64,29 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        if (cursor == null) {
+            return 0;
+        }
+        return cursor.getCount();
+    }
+
+    /**
+     * When data changes and a re-query occurs, this function swaps the old Cursor
+     * with a newly updated Cursor (Cursor c) that is passed in.
+     */
+    public Cursor swapCursor(Cursor c) {
+        // check if this cursor is the same as the previous cursor (mCursor)
+        if (cursor == c) {
+            return null; // nothing has changed
+        }
+        Cursor temp = cursor;
+        this.cursor = c; // new cursor value assigned
+
+        //check if this is a valid cursor, then update the cursor
+        if (c != null) {
+            this.notifyDataSetChanged();
+        }
+        return temp;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -83,5 +113,4 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     public interface RecyclerViewItemClickListener {
         void onRecyclerViewItemClicked(int clickedItemIndex);
     }
-
 }

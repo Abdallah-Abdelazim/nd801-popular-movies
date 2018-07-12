@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class MovieVideosFragment extends Fragment {
+public class MovieVideosFragment extends Fragment implements VideosAdapter.RecyclerViewItemClickListener {
 
     private static final String TAG = MovieVideosFragment.class.getSimpleName();
 
@@ -115,24 +115,15 @@ public class MovieVideosFragment extends Fragment {
 
                                     videosRecyclerView.setNestedScrollingEnabled(false);
 
-                                    LinearLayoutManager layoutManager = new LinearLayoutManager(
-                                            MovieVideosFragment.this.getContext());
+                                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                                     videosRecyclerView.setLayoutManager(layoutManager);
 
                                     DividerItemDecoration dividerItemDecoration =
-                                            new DividerItemDecoration(MovieVideosFragment.this.getContext(),
-                                                    layoutManager.getOrientation());
+                                            new DividerItemDecoration(getContext(), layoutManager.getOrientation());
                                     videosRecyclerView.addItemDecoration(dividerItemDecoration);
 
-                                    videosAdapter = new VideosAdapter(videos
-                                            , new VideosAdapter.RecyclerViewItemClickListener() {
-                                        @Override
-                                        public void onRecyclerViewItemClicked(Video video) {
-                                            String videoLink =
-                                                    getString(R.string.youtube_video_base_url, video.getKey());
-                                            openVideoExternally(videoLink);
-                                        }
-                                    });
+                                    videosAdapter = new VideosAdapter(getContext(), videos
+                                            , MovieVideosFragment.this);
                                     videosRecyclerView.setAdapter(videosAdapter);
                                 }
                                 else {
@@ -183,4 +174,10 @@ public class MovieVideosFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onRecyclerViewItemClicked(Video video) {
+        String videoLink =
+                getString(R.string.youtube_video_base_url, video.getKey());
+        openVideoExternally(videoLink);
+    }
 }

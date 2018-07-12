@@ -2,9 +2,14 @@ package com.abdallah.popularmovies.fragments;
 
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +21,9 @@ import android.widget.ProgressBar;
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.activities.MovieDetailsActivity;
 import com.abdallah.popularmovies.adapters.EndlessRecyclerOnScrollListener;
+import com.abdallah.popularmovies.adapters.FavoriteMoviesCursorAdapter;
 import com.abdallah.popularmovies.adapters.MoviesAdapter;
+import com.abdallah.popularmovies.data.MovieDbContract;
 import com.abdallah.popularmovies.models.Movie;
 
 import java.util.ArrayList;
@@ -26,9 +33,13 @@ import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavoriteMoviesFragment extends Fragment implements MoviesAdapter.RecyclerViewItemClickListener {
+public class FavoriteMoviesFragment extends Fragment
+        implements FavoriteMoviesCursorAdapter.RecyclerViewItemClickListener
+        , LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = FavoriteMoviesFragment.class.getSimpleName();
+
+    private static final int FAVORITE_MOVIES_LOADER_ID = 0;
 
     @BindView(R.id.rv_movies) RecyclerView moviesRecyclerView;
     @BindView(R.id.ll_empty_list) LinearLayout emptyMoviesListLinearLayout;
@@ -36,9 +47,7 @@ public class FavoriteMoviesFragment extends Fragment implements MoviesAdapter.Re
     @BindInt(R.integer.grid_span_count) int gridSpanCount;
 
     private GridLayoutManager layoutManager;
-    private MoviesAdapter adapter;
-
-    private List<Movie> moviesList;
+    private FavoriteMoviesCursorAdapter adapter;
 
     public FavoriteMoviesFragment() {
         // Required empty public constructor
@@ -69,14 +78,11 @@ public class FavoriteMoviesFragment extends Fragment implements MoviesAdapter.Re
                 , container, false);
         ButterKnife.bind(this, fragmentView);
 
-        return fragmentView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
         configureMoviesRecyclerView();
+
+        getLoaderManager().initLoader(FAVORITE_MOVIES_LOADER_ID, null, this);
+
+        return fragmentView;
     }
 
     private void configureMoviesRecyclerView() {
@@ -87,25 +93,40 @@ public class FavoriteMoviesFragment extends Fragment implements MoviesAdapter.Re
         layoutManager = new GridLayoutManager(getContext(), gridSpanCount);
         moviesRecyclerView.setLayoutManager(layoutManager);
 
-        moviesList = new ArrayList<>();
-        adapter = new MoviesAdapter(moviesList, this);
+        adapter = new FavoriteMoviesCursorAdapter(getContext(), this);
         moviesRecyclerView.setAdapter(adapter);
-
-        loadMovies();
-    }
-
-    private void loadMovies() {
-
     }
 
     @Override
     public void onRecyclerViewItemClicked(int clickedItemIndex) {
         Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
 
-        Movie movie = moviesList.get(clickedItemIndex);
-        long movieId = movie.getId();
-        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
+//        Movie movie = moviesList.get(clickedItemIndex);
+//        long movieId = movie.getId();
+//        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
 
         startActivity(intent);
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        switch (id) {
+            case FAVORITE_MOVIES_LOADER_ID:
+                return new CursorLoader(getContext(), MovieDbContract.FavoriteMovie.CONTENT_URI
+                        , null, null, null, null);
+            default:
+                throw new UnsupportedOperationException("Unknown id: " + id);
+        }
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        adapter.swapCursor(null);
     }
 }

@@ -26,7 +26,8 @@ public class MoviesContentProvider extends ContentProvider {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         uriMatcher.addURI(MovieDbContract.AUTHORITY, MovieDbContract.PATH_FAVORITE_MOVIES, MOVIES);
-        uriMatcher.addURI(MovieDbContract.AUTHORITY, MovieDbContract.PATH_FAVORITE_MOVIES + "/#", MOVIE_WITH_ID);
+        uriMatcher.addURI(MovieDbContract.AUTHORITY
+                , MovieDbContract.PATH_FAVORITE_MOVIES + "/#", MOVIE_WITH_ID);
 
         return uriMatcher;
     }

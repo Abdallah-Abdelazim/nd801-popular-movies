@@ -1,5 +1,6 @@
 package com.abdallah.popularmovies.activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
+import com.abdallah.popularmovies.data.MovieDbContract;
+import com.abdallah.popularmovies.data.MovieDbHelper;
 import com.abdallah.popularmovies.fragments.BrowseMoviesFragment;
 import com.abdallah.popularmovies.fragments.MovieReviewsFragment;
 import com.abdallah.popularmovies.fragments.MovieVideosFragment;
@@ -95,6 +98,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_favorite)
     public void markMovieAsFavoriteOrUnfavorite() {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_TMDB_ID, movie.getId());
+        contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_TITLE, movie.getTitle());
+        contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_POSTER_PATH, movie.getPosterPath());
+
+        MovieDbHelper dbHelper = new MovieDbHelper(this);
+//        dbHelper.onUpgrade(dbHelper.getWritableDatabase(), 1, 1);
+        dbHelper.getWritableDatabase().insert(MovieDbContract.FavoriteMovie.TABLE_NAME
+                , null, contentValues);
+
+//        getContentResolver().insert(MovieDbContract.FavoriteMovie.CONTENT_URI, contentValues);
 
         // change button to become "unfavorite" button
         markAsFavoriteButton.setText(R.string.mark_as_unfavorite_button_text);

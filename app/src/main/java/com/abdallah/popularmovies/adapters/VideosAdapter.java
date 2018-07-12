@@ -1,5 +1,6 @@
 package com.abdallah.popularmovies.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,15 +23,20 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     private final static String TAG = VideosAdapter.class.getSimpleName();
 
+    private Context ctx;
     private List<Video> videos;
     private RecyclerViewItemClickListener itemClickListener;
 
-    public VideosAdapter(List<Video> videos, RecyclerViewItemClickListener itemClickListener) {
+    public VideosAdapter(Context ctx, List<Video> videos
+            , RecyclerViewItemClickListener itemClickListener) {
+        this.ctx = ctx;
         this.videos = videos;
         this.itemClickListener = itemClickListener;
     }
 
-    public VideosAdapter(Video[] videos, RecyclerViewItemClickListener itemClickListener) {
+    public VideosAdapter(Context ctx, Video[] videos
+            , RecyclerViewItemClickListener itemClickListener) {
+        this.ctx = ctx;
         this.videos = Arrays.asList(videos);
         this.itemClickListener = itemClickListener;
     }
@@ -49,8 +55,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Video vid = videos.get(position);
 
-        String thumbnailUrl = holder.itemView.getResources()
-                .getString(R.string.youtube_video_thumbnail_url, vid.getKey());
+        String thumbnailUrl = ctx.getString(R.string.youtube_video_thumbnail_url, vid.getKey());
         Picasso.get()
                 .load(thumbnailUrl)
                 .into(holder.thumbnailImageView);

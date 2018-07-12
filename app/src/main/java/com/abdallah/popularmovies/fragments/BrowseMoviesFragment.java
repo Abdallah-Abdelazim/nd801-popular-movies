@@ -134,7 +134,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
         moviesRecyclerView.setLayoutManager(layoutManager);
 
         moviesList = new ArrayList<>();
-        adapter = new MoviesAdapter(moviesList, this);
+        adapter = new MoviesAdapter(getContext(), moviesList, this);
         moviesRecyclerView.setAdapter(adapter);
 
         recyclerViewVisibleThreshold = 5*gridSpanCount; // always 5 rows of visible threshold
