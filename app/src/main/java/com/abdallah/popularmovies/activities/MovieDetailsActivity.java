@@ -100,16 +100,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public void markMovieAsFavoriteOrUnfavorite() {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_TMDB_ID, movie.getId());
+        contentValues.put(MovieDbContract.FavoriteMovie._ID, movie.getId());
         contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_TITLE, movie.getTitle());
         contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_POSTER_PATH, movie.getPosterPath());
 
-        MovieDbHelper dbHelper = new MovieDbHelper(this);
-//        dbHelper.onUpgrade(dbHelper.getWritableDatabase(), 1, 1);
-        dbHelper.getWritableDatabase().insert(MovieDbContract.FavoriteMovie.TABLE_NAME
-                , null, contentValues);
-
-//        getContentResolver().insert(MovieDbContract.FavoriteMovie.CONTENT_URI, contentValues);
+        getContentResolver().insert(MovieDbContract.FavoriteMovie.CONTENT_URI, contentValues);
 
         // change button to become "unfavorite" button
         markAsFavoriteButton.setText(R.string.mark_as_unfavorite_button_text);

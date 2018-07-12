@@ -44,18 +44,16 @@ public class FavoriteMoviesCursorAdapter extends RecyclerView.Adapter<FavoriteMo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         int idColIndex = cursor.getColumnIndex(MovieDbContract.FavoriteMovie._ID);
-        int tmdbIdColIndex = cursor.getColumnIndex(MovieDbContract.FavoriteMovie.COLUMN_NAME_TMDB_ID);
         int titleColIndex = cursor.getColumnIndex(MovieDbContract.FavoriteMovie.COLUMN_NAME_TITLE);
         int posterPathColIndex = cursor.getColumnIndex(MovieDbContract.FavoriteMovie.COLUMN_NAME_POSTER_PATH);
 
         cursor.moveToPosition(position); // get to the right location in the cursor
 
         long id = cursor.getLong(idColIndex);
-        long tmdbId = cursor.getLong(tmdbIdColIndex);
         String title = cursor.getString(titleColIndex);
         String posterPath = cursor.getString(posterPathColIndex);
 
-        holder.itemView.setTag(tmdbId);
+        holder.itemView.setTag(id);
         String posterUrl = ctx.getString(R.string.tmdb_img_url, posterPath);
         Picasso.get()
                 .load(posterUrl)
