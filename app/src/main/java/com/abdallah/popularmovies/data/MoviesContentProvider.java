@@ -99,10 +99,10 @@ public class MoviesContentProvider extends ContentProvider {
         switch (uriMatcher.match(uri)) {
             case MOVIES:
                 long id = db.insert(MovieDbContract.FavoriteMovie.TABLE_NAME, null, values);
-                if ( id > 0 ) {
+                if (id != -1) {
                     insertedItemUri = ContentUris.withAppendedId(MovieDbContract.FavoriteMovie.CONTENT_URI, id);
                 } else {
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                    return null;
                 }
                 break;
             default:

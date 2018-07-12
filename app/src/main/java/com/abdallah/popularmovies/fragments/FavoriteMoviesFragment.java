@@ -123,6 +123,9 @@ public class FavoriteMoviesFragment extends Fragment
         switch (loader.getId()) {
             case FAVORITE_MOVIES_LOADER_ID:
                 adapter.swapCursor(data);
+                if (data.getCount() == 0) {
+                    emptyMoviesListLinearLayout.setVisibility(View.VISIBLE);
+                }
                 break;
         }
     }

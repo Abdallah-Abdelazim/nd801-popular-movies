@@ -33,6 +33,7 @@
     <string name="error_loading_reviews_msg">Couldn\'t load reviews!</string>
     <string name="error_open_url">Couldn\'t open the URL on your device!</string>
     <string name="endless_scrolling_end_msg">The end has been reached!</string>
+    <string name="movie_favorite_unfavorite_error">An error has occurred! Please try again.</string>
     <!---->
 
     <!-- Views text -->

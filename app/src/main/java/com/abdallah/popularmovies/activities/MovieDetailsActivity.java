@@ -1,7 +1,10 @@
 package com.abdallah.popularmovies.activities;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
@@ -64,6 +68,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private Movie movie;
 
+    private boolean isFavorite = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +84,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         if (movieId != -1) {
             loadMovieDetails();
+            checkIsFavorite();
 
             if (savedInstanceState == null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -96,16 +103,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.btn_favorite)
-    public void markMovieAsFavoriteOrUnfavorite() {
+    private void checkIsFavorite() {
+        markAsFavoriteButton.setVisibility(View.INVISIBLE);
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MovieDbContract.FavoriteMovie._ID, movie.getId());
-        contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_TITLE, movie.getTitle());
-        contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_POSTER_PATH, movie.getPosterPath());
+        Uri movieUri = ContentUris.withAppendedId(MovieDbContract.FavoriteMovie.CONTENT_URI, movieId);
+        Cursor cursor = getContentResolver().
+                query(movieUri, null, null, null, null);
+        if (cursor.getCount() != 0) {
+            // movie exists in the favorite movies db
+            displayUnfavoriteButton();
+        }
+        markAsFavoriteButton.setVisibility(View.VISIBLE);
+    }
 
-        getContentResolver().insert(MovieDbContract.FavoriteMovie.CONTENT_URI, contentValues);
-
+    private void displayUnfavoriteButton() {
+        isFavorite = true;
         // change button to become "unfavorite" button
         markAsFavoriteButton.setText(R.string.mark_as_unfavorite_button_text);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -114,8 +126,58 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     getResources().getDrawable(R.drawable.ic_heart), null, null, null);
         }
         else {
-            markAsFavoriteButton.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_heart)
-                    , null, null, null);
+            markAsFavoriteButton.setCompoundDrawablesWithIntrinsicBounds(
+                    getResources().getDrawable(R.drawable.ic_heart), null, null, null);
+        }
+    }
+
+    private void displayFavoriteButton() {
+        isFavorite = false;
+        // change button to become "favorite" button
+        markAsFavoriteButton.setText(R.string.mark_as_favorite_button_text);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            // API level 17 and above
+            markAsFavoriteButton.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    getResources().getDrawable(R.drawable.ic_heart_outline), null, null, null);
+        }
+        else {
+            markAsFavoriteButton.setCompoundDrawablesWithIntrinsicBounds(
+                    getResources().getDrawable(R.drawable.ic_heart_outline), null, null, null);
+        }
+    }
+
+    @OnClick(R.id.btn_favorite)
+    public void markMovieAsFavoriteOrUnfavorite() {
+
+        if (!isFavorite) {
+            // favorite the movie
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MovieDbContract.FavoriteMovie._ID, movie.getId());
+            contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_TITLE, movie.getTitle());
+            contentValues.put(MovieDbContract.FavoriteMovie.COLUMN_NAME_POSTER_PATH, movie.getPosterPath());
+
+            Uri insertedMovieUri = getContentResolver().insert(
+                    MovieDbContract.FavoriteMovie.CONTENT_URI, contentValues);
+
+            if (insertedMovieUri != null) {
+                displayUnfavoriteButton();
+            }
+            else {
+                Toast.makeText(this, R.string.movie_favorite_unfavorite_error
+                        , Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            // unfavorite the movie
+            Uri movieUri = ContentUris.withAppendedId(MovieDbContract.FavoriteMovie.CONTENT_URI, movieId);
+            int moviesDeleted = getContentResolver().delete(movieUri, null, null);
+            if (moviesDeleted != 0) {
+                displayFavoriteButton();
+            }
+            else {
+                Toast.makeText(this, R.string.movie_favorite_unfavorite_error
+                        , Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
