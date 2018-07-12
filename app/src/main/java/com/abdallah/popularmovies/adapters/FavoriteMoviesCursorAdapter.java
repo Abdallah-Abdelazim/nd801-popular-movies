@@ -100,8 +100,8 @@ public class FavoriteMoviesCursorAdapter extends RecyclerView.Adapter<FavoriteMo
 
         @Override
         public void onClick(View v) {
-            int clickedItemIndex = getAdapterPosition();
-            itemClickListener.onRecyclerViewItemClicked(clickedItemIndex);
+            long movieId = (long) v.getTag();
+            itemClickListener.onRecyclerViewItemClicked(movieId);
         }
     }
 
@@ -109,6 +109,6 @@ public class FavoriteMoviesCursorAdapter extends RecyclerView.Adapter<FavoriteMo
      * Used in handling items clicks
      */
     public interface RecyclerViewItemClickListener {
-        void onRecyclerViewItemClicked(int clickedItemIndex);
+        void onRecyclerViewItemClicked(long movieId);
     }
 }

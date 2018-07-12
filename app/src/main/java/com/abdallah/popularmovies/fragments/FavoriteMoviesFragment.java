@@ -98,12 +98,10 @@ public class FavoriteMoviesFragment extends Fragment
     }
 
     @Override
-    public void onRecyclerViewItemClicked(int clickedItemIndex) {
-        Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
+    public void onRecyclerViewItemClicked(long movieId) {
 
-//        Movie movie = moviesList.get(clickedItemIndex);
-//        long movieId = movie.getId();
-//        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
+        Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
 
         startActivity(intent);
     }
@@ -122,11 +120,19 @@ public class FavoriteMoviesFragment extends Fragment
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
+        switch (loader.getId()) {
+            case FAVORITE_MOVIES_LOADER_ID:
+                adapter.swapCursor(data);
+                break;
+        }
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-        adapter.swapCursor(null);
+        switch (loader.getId()) {
+            case FAVORITE_MOVIES_LOADER_ID:
+                adapter.swapCursor(null);
+                break;
+        }
     }
 }
