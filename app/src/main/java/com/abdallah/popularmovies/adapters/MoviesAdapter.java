@@ -59,6 +59,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         return movies.size();
     }
 
+    public void changeMoviesList(List<Movie> movies) {
+        this.movies = movies;
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.iv_movie_poster) public ImageView moviePosterImageView;

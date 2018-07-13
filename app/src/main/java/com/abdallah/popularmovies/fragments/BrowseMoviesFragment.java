@@ -33,6 +33,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +47,10 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
     private static final String TAG = BrowseMoviesFragment.class.getSimpleName();
 
-    private static final String STATE_SORTING_METHOD = "sorting_method";
+    private static final String STATE_SORTING_METHOD = "STATE_SORTING_METHOD";
+    private static final String STATE_CURRENT_PAGE = "STATE_CURRENT_PAGE";
+    private static final String STATE_TOTAL_PAGES_NUM = "STATE_TOTAL_PAGES_NUM";
+    private static final String STATE_MOVIES_LIST = "STATE_MOVIES_LIST";
 
     @BindView(R.id.rv_movies) RecyclerView moviesRecyclerView;
     @BindView(R.id.loading_movies_pb) ProgressBar loadingMoviesProgressBar;
@@ -101,6 +105,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
         if (savedInstanceState != null) {
             moviesSortingMethod = savedInstanceState.getInt(STATE_SORTING_METHOD);
+            // the sorting menu item checking is restored automatically
 
             Log.d(TAG, "restored sorting method = " + moviesSortingMethod);
         }
@@ -114,13 +119,26 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        currentPage = totalPagesNum = 1;
-        loadMovies();
+        if (savedInstanceState == null) {
+            currentPage = totalPagesNum = 1;
+            loadMovies();
+        }
+        else {
+            // restore data from savedInstanceState
+            currentPage = savedInstanceState.getInt(STATE_CURRENT_PAGE);
+            totalPagesNum = savedInstanceState.getInt(STATE_TOTAL_PAGES_NUM);
+            moviesList = Parcels.unwrap(savedInstanceState.getParcelable(STATE_MOVIES_LIST));
+            adapter.changeMoviesList(moviesList);
+        }
+
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putInt(STATE_SORTING_METHOD, moviesSortingMethod);
+        outState.putInt(STATE_CURRENT_PAGE, currentPage);
+        outState.putInt(STATE_TOTAL_PAGES_NUM, totalPagesNum);
+        outState.putParcelable(STATE_MOVIES_LIST, Parcels.wrap(moviesList));
 
         super.onSaveInstanceState(outState);
     }

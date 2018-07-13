@@ -3,43 +3,46 @@ package com.abdallah.popularmovies.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
+@Parcel
 public class Movie {
 
-    private long id;
+    long id;
 
-    private String title;
+    String title;
 
-    private String overview;  // also called plot synopsis
+    String overview;  // also called plot synopsis
 
-    private String tagline;
+    String tagline;
 
     @SerializedName("backdrop_path")
-    private String backdropPath;
+    String backdropPath;
 
     @SerializedName("poster_path")
-    private String posterPath;
+    String posterPath;
 
-    private long budget;
+    long budget;
 
     @SerializedName("original_language")
-    private String originalLanguage;
+    String originalLanguage;
 
     @SerializedName("release_date")
-    private Date releaseDate;
+    Date releaseDate;
 
-    private int runtime;
+    int runtime;
 
     @SerializedName("vote_average")
-    private float voteAverage;
+    float voteAverage;
 
-    private boolean adult;
+    boolean adult;
 
     @SerializedName("imdb_id")
-    private String imdbId;
+    String imdbId;
 
-    private long revenue;
+    long revenue;
 
 
     public Movie() {
