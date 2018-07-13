@@ -11,6 +11,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +60,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @BindView(R.id.tv_rating) TextView ratingTextView;
     @BindView(R.id.btn_favorite) Button markAsFavoriteButton;
     @BindView(R.id.tv_overview) TextView overviewTextView;
+    @BindView(R.id.tv_imdb_link) TextView imdbLinkTextView;
 
     @BindView(R.id.movie_details_layout) NestedScrollView movieDetailsLayout;
     @BindView(R.id.pb_loading_movie_details) ProgressBar loadingMovieDetailsProgressBar;
@@ -211,6 +215,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     ratingTextView.setText(Float.toString(movie.getVoteAverage()));
 
                     overviewTextView.setText(movie.getOverview());
+
+                    Spanned imdbHtmlLink = Html.fromHtml(
+                            String.format("<a href=\"%2$s\">%1$s</a>", getString(R.string.imdb_link_text)
+                                    , getString(R.string.imdb_movie_page_base_link, movie.getImdbId())));
+                    imdbLinkTextView.setText(imdbHtmlLink);
+                    imdbLinkTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
 
                     movieDetailsLayout.setVisibility(View.VISIBLE);
