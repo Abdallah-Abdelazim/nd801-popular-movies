@@ -26,8 +26,6 @@ import android.widget.Toast;
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.api.TMDBServices;
 import com.abdallah.popularmovies.data.MovieDbContract;
-import com.abdallah.popularmovies.data.MovieDbHelper;
-import com.abdallah.popularmovies.fragments.BrowseMoviesFragment;
 import com.abdallah.popularmovies.fragments.MovieReviewsFragment;
 import com.abdallah.popularmovies.fragments.MovieVideosFragment;
 import com.abdallah.popularmovies.models.Movie;

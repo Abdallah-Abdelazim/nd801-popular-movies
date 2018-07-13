@@ -16,18 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.activities.MovieDetailsActivity;
-import com.abdallah.popularmovies.adapters.EndlessRecyclerOnScrollListener;
 import com.abdallah.popularmovies.adapters.FavoriteMoviesCursorAdapter;
-import com.abdallah.popularmovies.adapters.MoviesAdapter;
 import com.abdallah.popularmovies.data.MovieDbContract;
-import com.abdallah.popularmovies.models.Movie;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindInt;
 import butterknife.BindView;
