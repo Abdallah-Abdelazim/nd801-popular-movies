@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.adapters.VideosAdapter;
-import com.abdallah.popularmovies.api.TMDBServices;
+import com.abdallah.popularmovies.api.TmdbServices;
 import com.abdallah.popularmovies.models.Video;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -104,7 +104,7 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.Recyc
         loadingVideosProgressBar.setVisibility(View.VISIBLE);
         videosMsgTextView.setVisibility(View.INVISIBLE);
 
-        TMDBServices.requestMovieVideos(getContext(), movieId
+        TmdbServices.requestMovieVideos(getContext(), movieId
                 , new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -112,7 +112,7 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.Recyc
                         try {
                             Gson gson = new Gson();
                             Video[] videos = gson.fromJson(
-                                    response.getJSONArray(TMDBServices.ResponseKeys.RESULTS).toString()
+                                    response.getJSONArray(TmdbServices.ResponseKeys.RESULTS).toString()
                                     , Video[].class);
 
                             if (videos != null) {

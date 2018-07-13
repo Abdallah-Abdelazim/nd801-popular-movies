@@ -23,7 +23,7 @@ import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.activities.MovieDetailsActivity;
 import com.abdallah.popularmovies.adapters.EndlessRecyclerOnScrollListener;
 import com.abdallah.popularmovies.adapters.MoviesAdapter;
-import com.abdallah.popularmovies.api.TMDBServices;
+import com.abdallah.popularmovies.api.TmdbServices;
 import com.abdallah.popularmovies.models.Movie;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Response;
@@ -65,7 +65,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
     private List<Movie> moviesList;
 
-    private int moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
+    private int moviesSortingMethod = TmdbServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
     private int currentPage;
     private int totalPagesNum;
 
@@ -188,7 +188,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
             errorSnackbar.dismiss();
         }
 
-        TMDBServices.requestMovies(getContext(), moviesSortingMethod, currentPage
+        TmdbServices.requestMovies(getContext(), moviesSortingMethod, currentPage
                 , new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -200,7 +200,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
                             // serialize the json response to Movies array
                             Gson gson = new Gson();
                             Movie [] moviesArray = gson.fromJson(
-                                    response.getJSONArray(TMDBServices.ResponseKeys.RESULTS).toString()
+                                    response.getJSONArray(TmdbServices.ResponseKeys.RESULTS).toString()
                                     , Movie[].class);
                             List<Movie> movies = Arrays.asList(moviesArray);
                             moviesList.addAll(movies);
@@ -270,10 +270,10 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
         inflater.inflate(R.menu.fragment_browse_movies, menu);
 
         // check the menu item corresponding to the sorting method
-        if (moviesSortingMethod == TMDBServices.SORT_MOVIES_BY_POPULARITY) {
+        if (moviesSortingMethod == TmdbServices.SORT_MOVIES_BY_POPULARITY) {
             menu.findItem(R.id.action_sort_by_popularity).setChecked(true);
         }
-        else if (moviesSortingMethod == TMDBServices.SORT_MOVIES_BY_RATING) {
+        else if (moviesSortingMethod == TmdbServices.SORT_MOVIES_BY_RATING) {
             menu.findItem(R.id.action_sort_by_rating).setChecked(true);
         }
 
@@ -288,7 +288,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
             case R.id.action_sort_by_popularity:
                 item.setChecked(true);
 
-                moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_POPULARITY;
+                moviesSortingMethod = TmdbServices.SORT_MOVIES_BY_POPULARITY;
 
                 resetMoviesRecyclerView();
 
@@ -297,7 +297,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
             case R.id.action_sort_by_rating:
                 item.setChecked(true);
 
-                moviesSortingMethod = TMDBServices.SORT_MOVIES_BY_RATING;
+                moviesSortingMethod = TmdbServices.SORT_MOVIES_BY_RATING;
 
                 resetMoviesRecyclerView();
 

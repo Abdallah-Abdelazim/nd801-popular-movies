@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.abdallah.popularmovies.R;
-import com.abdallah.popularmovies.api.TMDBServices;
+import com.abdallah.popularmovies.api.TmdbServices;
 import com.abdallah.popularmovies.data.MovieDbContract;
 import com.abdallah.popularmovies.fragments.MovieReviewsFragment;
 import com.abdallah.popularmovies.fragments.MovieVideosFragment;
@@ -189,7 +189,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         loadErrorLinearLayout.setVisibility(View.INVISIBLE);
         loadingMovieDetailsProgressBar.setVisibility(View.VISIBLE);
 
-        TMDBServices.requestMovieDetails(this, movieId
+        TmdbServices.requestMovieDetails(this, movieId
                 , new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -282,7 +282,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         // cancels ongoing requests (if any) that if continued will cause the app to crash when finished.
-        TMDBServices.cancelOngoingRequests(this);
+        TmdbServices.cancelOngoingRequests(this);
         Log.d(TAG, "Requests has been canceled!");
         super.onDestroy();
     }

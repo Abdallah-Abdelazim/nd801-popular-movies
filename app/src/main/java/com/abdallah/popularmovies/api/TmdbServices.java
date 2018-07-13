@@ -12,9 +12,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONObject;
 
-public final class TMDBServices {
+public final class TmdbServices {
 
-    private static final String TAG = TMDBServices.class.getSimpleName();
+    private static final String TAG = TmdbServices.class.getSimpleName();
 
     private final static String API_KEY = BuildConfig.TMDB_API_KEY;
 
@@ -42,7 +42,7 @@ public final class TMDBServices {
     }
 
 
-    private TMDBServices() {/* prevent instantiation */};
+    private TmdbServices() {/* prevent instantiation */};
 
     public static void requestMovies(Context ctx, int moviesSortingMethod, int page
             , Response.Listener<JSONObject> onSuccess, Response.ErrorListener onError) {

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.abdallah.popularmovies.R;
 import com.abdallah.popularmovies.adapters.ReviewsAdapter;
-import com.abdallah.popularmovies.api.TMDBServices;
+import com.abdallah.popularmovies.api.TmdbServices;
 import com.abdallah.popularmovies.models.Review;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -101,7 +101,7 @@ public class MovieReviewsFragment extends Fragment {
         loadingReviewsProgressBar.setVisibility(View.VISIBLE);
         reviewsMsgTextView.setVisibility(View.INVISIBLE);
 
-        TMDBServices.requestMovieReviews(getContext(), movieId
+        TmdbServices.requestMovieReviews(getContext(), movieId
                 , new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -109,7 +109,7 @@ public class MovieReviewsFragment extends Fragment {
                         try {
                             Gson gson = new Gson();
                             Review[] reviews = gson.fromJson(
-                                    response.getJSONArray(TMDBServices.ResponseKeys.RESULTS).toString()
+                                    response.getJSONArray(TmdbServices.ResponseKeys.RESULTS).toString()
                                     , Review[].class);
 
                             if (reviews != null) {
