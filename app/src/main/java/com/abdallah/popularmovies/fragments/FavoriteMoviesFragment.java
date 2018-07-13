@@ -25,6 +25,7 @@ import com.abdallah.popularmovies.data.MovieDbContract;
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class FavoriteMoviesFragment extends Fragment
         implements FavoriteMoviesCursorAdapter.RecyclerViewItemClickListener
@@ -38,6 +39,7 @@ public class FavoriteMoviesFragment extends Fragment
     @BindView(R.id.ll_empty_list) LinearLayout emptyMoviesListLinearLayout;
 
     @BindInt(R.integer.grid_span_count) int gridSpanCount;
+    private Unbinder unbinder;
 
     private GridLayoutManager layoutManager;
     private FavoriteMoviesCursorAdapter adapter;
@@ -69,13 +71,19 @@ public class FavoriteMoviesFragment extends Fragment
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_favorite_movies
                 , container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         configureMoviesRecyclerView();
 
         getLoaderManager().initLoader(FAVORITE_MOVIES_LOADER_ID, null, this);
 
         return fragmentView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void configureMoviesRecyclerView() {

@@ -42,6 +42,7 @@ import java.util.List;
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.RecyclerViewItemClickListener {
 
@@ -57,6 +58,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     @BindView(R.id.ll_empty_list) LinearLayout emptyMoviesListLinearLayout;
 
     @BindInt(R.integer.grid_span_count) int gridSpanCount;
+    private Unbinder unbinder;
 
     private GridLayoutManager layoutManager;
     private MoviesAdapter adapter;
@@ -101,7 +103,7 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_browse_movies
                 , container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         if (savedInstanceState != null) {
             moviesSortingMethod = savedInstanceState.getInt(STATE_SORTING_METHOD);
@@ -141,6 +143,12 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
         outState.putParcelable(STATE_MOVIES_LIST, Parcels.wrap(moviesList));
 
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void configureMoviesRecyclerView() {

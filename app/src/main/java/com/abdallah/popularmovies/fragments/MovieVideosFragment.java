@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class MovieVideosFragment extends Fragment implements VideosAdapter.RecyclerViewItemClickListener {
@@ -41,6 +42,7 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.Recyc
     @BindView(R.id.rv_videos) RecyclerView videosRecyclerView;
     @BindView(R.id.pb_loading_videos) ProgressBar loadingVideosProgressBar;
     @BindView(R.id.tv_videos_msg) TextView videosMsgTextView;
+    private Unbinder unbinder;
 
     private long movieId;
 
@@ -79,7 +81,7 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.Recyc
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_movie_videos, container
                 , false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         return fragmentView;
     }
@@ -89,6 +91,12 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.Recyc
         super.onActivityCreated(savedInstanceState);
 
         loadMovieVideos();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     public void loadMovieVideos() {

@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class MovieReviewsFragment extends Fragment {
@@ -35,12 +36,10 @@ public class MovieReviewsFragment extends Fragment {
 
     private static final String ARG_MOVIE_ID = "ARG_MOVIE_ID";
 
-    @BindView(R.id.rv_reviews)
-    RecyclerView reviewsRecyclerView;
-    @BindView(R.id.pb_loading_reviews)
-    ProgressBar loadingReviewsProgressBar;
-    @BindView(R.id.tv_reviews_msg)
-    TextView reviewsMsgTextView;
+    @BindView(R.id.rv_reviews) RecyclerView reviewsRecyclerView;
+    @BindView(R.id.pb_loading_reviews) ProgressBar loadingReviewsProgressBar;
+    @BindView(R.id.tv_reviews_msg) TextView reviewsMsgTextView;
+    private Unbinder unbinder;
 
     private long movieId;
 
@@ -79,7 +78,7 @@ public class MovieReviewsFragment extends Fragment {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_movie_reviews, container
                 , false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         return fragmentView;
     }
@@ -89,6 +88,12 @@ public class MovieReviewsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         loadMovieReviews();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     public void loadMovieReviews() {
