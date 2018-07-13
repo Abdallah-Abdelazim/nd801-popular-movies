@@ -32,6 +32,15 @@ public final class TMDBServices {
     public static final int SORT_MOVIES_BY_POPULARITY = 1;
     public static final int SORT_MOVIES_BY_RATING = 2;
 
+    /**
+     * API JSON response keys constants.
+     */
+    public static final class ResponseKeys {
+
+        public static final String RESULTS = "results";
+
+    }
+
 
     private TMDBServices() {/* prevent instantiation */};
 

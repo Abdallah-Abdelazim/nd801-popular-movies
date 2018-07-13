@@ -199,7 +199,8 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
 
                             // serialize the json response to Movies array
                             Gson gson = new Gson();
-                            Movie [] moviesArray = gson.fromJson(response.getJSONArray("results").toString()
+                            Movie [] moviesArray = gson.fromJson(
+                                    response.getJSONArray(TMDBServices.ResponseKeys.RESULTS).toString()
                                     , Movie[].class);
                             List<Movie> movies = Arrays.asList(moviesArray);
                             moviesList.addAll(movies);

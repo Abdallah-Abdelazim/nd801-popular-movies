@@ -108,7 +108,8 @@ public class MovieReviewsFragment extends Fragment {
                         // serialize the json into Review array
                         try {
                             Gson gson = new Gson();
-                            Review[] reviews = gson.fromJson(response.getJSONArray("results").toString()
+                            Review[] reviews = gson.fromJson(
+                                    response.getJSONArray(TMDBServices.ResponseKeys.RESULTS).toString()
                                     , Review[].class);
 
                             if (reviews != null) {

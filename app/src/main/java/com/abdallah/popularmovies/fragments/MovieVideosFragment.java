@@ -111,7 +111,8 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.Recyc
                         // serialize the json to Videos array
                         try {
                             Gson gson = new Gson();
-                            Video[] videos = gson.fromJson(response.getJSONArray("results").toString()
+                            Video[] videos = gson.fromJson(
+                                    response.getJSONArray(TMDBServices.ResponseKeys.RESULTS).toString()
                                     , Video[].class);
 
                             if (videos != null) {
