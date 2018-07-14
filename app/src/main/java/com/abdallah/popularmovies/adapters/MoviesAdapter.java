@@ -51,7 +51,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         String posterUrl = ctx.getString(R.string.tmdb_img_url, movie.getPosterPath());
         Picasso.get()
                 .load(posterUrl)
-                .placeholder(R.drawable.img_download_placeholder)
                 .into(holder.moviePosterImageView);
     }
 

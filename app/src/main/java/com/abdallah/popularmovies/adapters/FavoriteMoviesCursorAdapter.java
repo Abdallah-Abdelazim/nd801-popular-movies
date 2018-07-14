@@ -57,7 +57,6 @@ public class FavoriteMoviesCursorAdapter extends RecyclerView.Adapter<FavoriteMo
         String posterUrl = ctx.getString(R.string.tmdb_img_url, posterPath);
         Picasso.get()
                 .load(posterUrl)
-                .placeholder(R.drawable.img_download_placeholder)
                 .into(holder.moviePosterImageView);
     }
 
