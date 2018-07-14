@@ -28,7 +28,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:textSize="36sp"
+                android:textAppearance="@style/TitleText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +67,7 @@
                     android:id="@+id/tv_release_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/PrimaryText"
                     android:textSize="24sp"
                     tools:layout_editor_absoluteX="145dp"
                     tools:layout_editor_absoluteY="34dp"
@@ -80,7 +81,7 @@
                     android:id="@+id/tv_runtime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
+                    android:textAppearance="@style/SecondaryText"
                     tools:text="120 min" />
 
                 <Space
@@ -97,6 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textAppearance="@style/PrimaryText"
                         android:textSize="36sp"
                         tools:text="8.1" />
 
@@ -105,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/total_vote"
-                        android:textSize="24sp" />
+                        android:textAppearance="@style/SecondaryText" />
                 </LinearLayout>
 
                 <Space
@@ -132,8 +134,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/overview_label"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textAppearance="@style/HeaderText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -148,7 +149,7 @@
                 android:layout_marginRight="24dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:textSize="18sp"
+                android:textAppearance="@style/PrimaryText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -220,8 +221,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/external_resources_text"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textAppearance="@style/HeaderText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -237,7 +237,7 @@
                 android:layout_marginRight="24dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
-                android:textSize="18sp"
+                android:textAppearance="@style/PrimaryText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

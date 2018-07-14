@@ -17,4 +17,22 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- Text Styles -->
+    <style name="TitleText" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">36sp</item>
+    </style>
+
+    <style name="HeaderText" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="PrimaryText" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="SecondaryText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <!---->
+
 </resources>
