@@ -111,7 +111,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 isFavorite = savedInstanceState.getBoolean(STATE_IS_FAVORITE);
 
                 displayMovie();
-                if (isFavorite == true) {
+                if (isFavorite) {
                     displayUnfavoriteButton();
                 }
             }
