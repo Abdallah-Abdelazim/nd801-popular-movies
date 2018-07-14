@@ -5,5 +5,5 @@
     <color name="colorPrimaryLight">#484848</color>
     <color name="colorAccent">#F44336</color>
     
-    <color name="img_placeholder">#e0e0e0</color>
+    <color name="img_download_placeholder">#e0e0e0</color>
 </resources>

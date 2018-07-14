@@ -227,7 +227,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         String posterUrl = getString(R.string.tmdb_img_url, movie.getPosterPath());
         Picasso.get()
                 .load(posterUrl)
-                .placeholder(R.drawable.img_placeholder)
+                .placeholder(R.drawable.img_download_placeholder)
                 .into(moviePosterImageView);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.US);

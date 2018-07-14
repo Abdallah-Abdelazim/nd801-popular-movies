@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <solid android:color="@color/img_placeholder" />
+    <solid android:color="@color/img_download_placeholder" />
 
 </shape>
