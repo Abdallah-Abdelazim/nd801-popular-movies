@@ -2,10 +2,8 @@
 Second project in Udacity's Android Developer Nanodegree.
 
 ## Screenshots
-<img src="./screenshots/1.png" alt="Navigation Drawer" width="200">
-<img src="./screenshots/2.png" alt="Browse Movies Screen" width="200">
-<img src="./screenshots/3.png" alt="Movie Details Screen 1" width="200">
-<img src="./screenshots/4.png" alt="Movie Details Screen 2" width="200">
+<img src="./screenshots/1.png" alt="Navigation Drawer" width="200"><img src="./screenshots/2.png" alt="Browse Movies Screen" width="200">
+<img src="./screenshots/3.png" alt="Movie Details Screen 1" width="200"><img src="./screenshots/4.png" alt="Movie Details Screen 2" width="200">
 
 ## Download
 You can download the app APK from [here][3].
