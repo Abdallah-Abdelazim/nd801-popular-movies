@@ -37,6 +37,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -50,6 +51,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
 
     public static final String EXTRA_MOVIE_ID = "MovieID";
+
+    private static final String STATE_MOVIE_ID = "STATE_MOVIE_ID";
+    private static final String STATE_MOVIE = "STATE_MOVIE";
+    private static final String STATE_IS_FAVORITE = "STATE_IS_FAVORITE";
 
     @BindView(R.id.tv_title) TextView titleTextView;
     @BindView(R.id.iv_movie_poster) ImageView moviePosterImageView;
@@ -81,14 +86,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
-        Intent intent = getIntent();
-        movieId = intent.getLongExtra(EXTRA_MOVIE_ID, -1);
+        movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, -1);
 
         if (movieId != -1) {
-            loadMovieDetails();
-            checkIsFavorite();
 
             if (savedInstanceState == null) {
+                loadMovieDetails();
+                checkIsFavorite();
+
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 // add MovieVideosFragment
                 fragmentManager.beginTransaction()
@@ -99,10 +104,32 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         .add(R.id.movie_reviews_fragment_container, MovieReviewsFragment.newInstance(movieId))
                         .commit();
             }
+            else {
+                // restore data from savedInstanceState
+                movieId = savedInstanceState.getLong(STATE_MOVIE_ID);
+                movie = Parcels.unwrap(savedInstanceState.getParcelable(STATE_MOVIE));
+                isFavorite = savedInstanceState.getBoolean(STATE_IS_FAVORITE);
+
+                displayMovie();
+                if (isFavorite == true) {
+                    displayUnfavoriteButton();
+                }
+            }
+
         }
         else {
             Log.d(TAG, "movieId wasn't found in the intent extras!");
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong(STATE_MOVIE_ID, movieId);
+        outState.putParcelable(STATE_MOVIE, Parcels.wrap(movie));
+        outState.putBoolean(STATE_IS_FAVORITE, isFavorite);
+
     }
 
     private void checkIsFavorite() {
