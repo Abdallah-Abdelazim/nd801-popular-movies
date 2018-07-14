@@ -64,7 +64,6 @@ public class BrowseMoviesFragment extends Fragment implements MoviesAdapter.Recy
     private MoviesAdapter adapter;
 
     private List<Movie> moviesList;
-
     private int moviesSortingMethod = TmdbServices.SORT_MOVIES_BY_POPULARITY; // The default is sorting by popularity
     private int currentPage;
     private int totalPagesNum;
