@@ -198,28 +198,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 movie = gson.fromJson(response.toString(), Movie.class);
 
                 if (movie != null) {
-                    titleTextView.setText(movie.getTitle());
-
-                    String posterUrl = getString(R.string.tmdb_img_url, movie.getPosterPath());
-                    Picasso.get()
-                            .load(posterUrl)
-                            .into(moviePosterImageView);
-
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.US);
-                    releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
-
-                    runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
-
-                    ratingTextView.setText(Float.toString(movie.getVoteAverage()));
-
-                    overviewTextView.setText(movie.getOverview());
-
-                    Spanned imdbHtmlLink = Html.fromHtml(
-                            String.format("<a href=\"%2$s\">%1$s</a>", getString(R.string.imdb_link_text)
-                                    , getString(R.string.imdb_movie_page_base_link, movie.getImdbId())));
-                    imdbLinkTextView.setText(imdbHtmlLink);
-                    imdbLinkTextView.setMovementMethod(LinkMovementMethod.getInstance());
-
+                    displayMovie();
 
                     movieDetailsLayout.setVisibility(View.VISIBLE);
                 }
@@ -231,7 +210,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 }
 
                 loadingMovieDetailsProgressBar.setVisibility(View.INVISIBLE);
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -241,6 +219,31 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 displayLoadError(error);
             }
         });
+    }
+
+    private void displayMovie() {
+        titleTextView.setText(movie.getTitle());
+
+        String posterUrl = getString(R.string.tmdb_img_url, movie.getPosterPath());
+        Picasso.get()
+                .load(posterUrl)
+                .placeholder(R.drawable.img_placeholder)
+                .into(moviePosterImageView);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy", Locale.US);
+        releaseDateTextView.setText(simpleDateFormat.format(movie.getReleaseDate()));
+
+        runtimeTextView.setText(getString(R.string.movie_runtime, movie.getRuntime()));
+
+        ratingTextView.setText(Float.toString(movie.getVoteAverage()));
+
+        overviewTextView.setText(movie.getOverview());
+
+        Spanned imdbHtmlLink = Html.fromHtml(
+                String.format("<a href=\"%2$s\">%1$s</a>", getString(R.string.imdb_link_text)
+                        , getString(R.string.imdb_movie_page_base_link, movie.getImdbId())));
+        imdbLinkTextView.setText(imdbHtmlLink);
+        imdbLinkTextView.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private void displayLoadError(VolleyError error) {

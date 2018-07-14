@@ -58,6 +58,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         String thumbnailUrl = ctx.getString(R.string.youtube_video_thumbnail_url, vid.getKey());
         Picasso.get()
                 .load(thumbnailUrl)
+                .placeholder(R.drawable.img_placeholder)
                 .into(holder.thumbnailImageView);
         holder.titleTextView.setText(vid.getName());
     }
