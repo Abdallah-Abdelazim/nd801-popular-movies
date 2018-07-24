@@ -1,11 +1,12 @@
 # Popular Movies
-Second project in Udacity's Android Developer Nanodegree.
-
-## Screenshots
-<img src="./screenshots/1.png" alt="Navigation Drawer" width="200" /> <img src="./screenshots/2.png" alt="Browse Movies Screen" width="200" /> <img src="./screenshots/3.png" alt="Movie Details Screen 1" width="200" /> <img src="./screenshots/4.png" alt="Movie Details Screen 2" width="200" />
+An app to help users discover popular and recent movies.  
+Second project in Udacity's [Android Developer Nanodegree][4].
 
 ## Download
 You can download the app APK from [here][3].
+
+## Screenshots
+<img src="./screenshots/1.png" alt="Navigation Drawer" width="200" /> <img src="./screenshots/2.png" alt="Browse Movies Screen" width="200" /> <img src="./screenshots/3.png" alt="Movie Details Screen 1" width="200" /> <img src="./screenshots/4.png" alt="Movie Details Screen 2" width="200" />
 
 ## How to run the project?
 This project uses web services from [TMDB][1].  
@@ -21,6 +22,8 @@ After that add the following line:
 TMDB_API_KEY="PUT_YOUR_TMDB_KEY_HERE"  
 ```
 
+
 [1]: https://www.themoviedb.org
 [2]: https://developers.themoviedb.org/3/getting-started/introduction
 [3]: https://github.com/Abdallah-Abdelazim/Popular-Movies/releases/latest
+[4]: https://eg.udacity.com/course/android-developer-nanodegree-by-google--nd801
