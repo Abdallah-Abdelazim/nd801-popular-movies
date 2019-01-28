@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Parcel
@@ -30,7 +32,7 @@ public class Movie {
     String originalLanguage;
 
     @SerializedName("release_date")
-    Date releaseDate;
+    String releaseDate;
 
     int runtime;
 
@@ -114,11 +116,17 @@ public class Movie {
     }
 
     public Date getReleaseDate() {
-        return releaseDate;
+        Date parsedDate = null;
+        try {
+            parsedDate = new SimpleDateFormat("yyyy-MM-dd").parse(releaseDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return parsedDate;
     }
 
     public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
+        this.releaseDate = releaseDate.toString();
     }
 
     public int getRuntime() {
